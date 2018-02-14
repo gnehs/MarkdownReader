@@ -1,0 +1,13 @@
+{
+    "siteName": "髒髒站",
+    "sitePort": 3014,
+    "dataURL": "./data/",
+    "allowRefresh": true,
+    "autoRefresh": 60,
+    "password": {
+        "status": true,
+        "password": "1069"
+    },
+    "postPerPage": 9,
+    "sessionSecret": "ㄐㄐ讚1069"
+}

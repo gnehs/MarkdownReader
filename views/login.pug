@@ -1,0 +1,17 @@
+include _header.pug
+include _nav.pug
+script(src='/js/login.js')
+.ts.container
+	if(message)
+		h1.ts.center.aligned.negative.header 提醒
+			.sub.header=message
+	else
+		h1.ts.center.aligned.header Hi!
+			.sub.header Please enter the password to login the system
+	#login.ts.centered.secondary.segment
+		form.ts.form(method='post',role='form',onsubmit='return check()')
+			.field
+				label Password
+				input(type='password', placeholder='', id='userPASS', name='userPASS',required)
+			button.ts.positive.fluid.button(type='submit') Login
+include _footer.pug

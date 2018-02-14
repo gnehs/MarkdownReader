@@ -1,0 +1,33 @@
+include _header.pug
+include _nav.pug
+.ts.container
+    h3.ts.header='Page '+nowPage+' of '+totalPage
+    .ts.doubling.three.cards
+        if(data)
+            each item in data
+                a.ts.card(href=item.link)
+                    .content
+                        .header=item.title
+                        .description!=item.summary
+        else
+            .ts.card
+                .content
+                    .description noithing
+    #pageSelections.ts.separated.primary.compact.buttons
+        -var firstPage=nowPage-5
+        -var lastPage=nowPage+5
+
+        -if(nowPage+4>totalPage)
+            -var lastPage=totalPage
+            -var firstPage=totalPage-10
+        -if(nowPage-4<0)
+            -var firstPage=1
+            -var lastPage=11
+
+        -for(var i=firstPage; i<lastPage+1; i++)
+            -if(i<totalPage+1)
+                -if(i == nowPage)
+                    a.ts.active.button(href='/page/' +i)=i
+                -else
+                    a.ts.button(href='/page/' +i)=i
+include _footer.pug

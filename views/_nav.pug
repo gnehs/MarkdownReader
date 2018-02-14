@@ -1,0 +1,8 @@
+#nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
+    .ts.container
+        a.item(href='/') Home
+        .right.fitted.item
+            if(page=='page'&&allowRefresh)
+                a.item(href='/refresh/')
+                    i.icon.refresh
+                    | Refresh

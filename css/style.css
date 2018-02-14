@@ -1,0 +1,114 @@
+#navigator {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#login {
+    max-width: 400px;
+}
+
+kbd {
+    font-family: 'Roboto Mono', monospace !important;
+}
+
+
+/*===========
+    Header
+===========*/
+
+header {
+    padding: 5em 2em !important;
+    padding-bottom: calc(4em + 48px) !important;
+}
+
+header .header {
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+
+/*==========
+    NAV
+==========*/
+
+#nav {
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.14);
+    margin-bottom: 35px;
+    margin-top: -48px;
+    background-color: rgba(0, 0, 0, 0.22);
+    overflow: scroll;
+    width: 100vw;
+}
+
+#nav a.item {
+    border-radius: 4px;
+}
+
+#nav a.item:hover {
+    background: rgba(0, 0, 0, 0.07);
+}
+
+#nav .ts.container {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: .88rem !important;
+    padding-right: .88rem !important;
+}
+
+#nav .input .icon {
+    color: white;
+}
+
+
+/*==========
+pageSelections
+==========*/
+
+#pageSelections {
+    text-align: center;
+    display: block;
+}
+
+#pageSelections .ts.button {
+    width: 45px !important;
+    margin-top: 20px !important;
+    transition: box-shadow 0.25s linear;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/*=============
+    文章內文
+=============*/
+
+#content,
+#content p {
+    font-size: 16px;
+    color: rgb(80, 80, 80);
+    line-height: 1.5em;
+}
+
+#content a {
+    color: rgb(93, 73, 171);
+}
+
+#content a:hover {
+    color: rgb(76, 60, 141);
+}
+
+#content a:active {
+    color: rgb(51, 41, 94);
+}
+
+#content img {
+    margin: 0 25%;
+    width: 50%;
+}
+
+@media screen and (max-width: 600px) {
+    #content img {
+        margin: 0 15%;
+        width: 70%;
+    }
+}

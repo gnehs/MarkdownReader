@@ -1,0 +1,14 @@
+include _header.pug
+include _nav.pug
+.ts.container
+    h3.ts.header=postTitle
+
+    if(post)
+        #content.ts.basic.segment!=postContent
+    else
+        #content.ts.basic.segment 無內文
+
+    button.ts.fluid.labeled.icon.button(onclick='history.back()')
+        i.arrow.left.icon
+        | 回上頁
+include _footer.pug
