@@ -101,14 +101,20 @@ pageSelections
     color: rgb(51, 41, 94);
 }
 
-#content img {
+#content>p>img {
     margin: 0 25%;
     width: 50%;
 }
 
 @media screen and (max-width: 600px) {
-    #content img {
+    #content>p>img {
         margin: 0 15%;
         width: 70%;
     }
+}
+
+#content pre {
+    background: #f6f6f6;
+    padding: 5px;
+    border-radius: 5px
 }
