@@ -21,7 +21,7 @@ MarkdownReader
 3. `npm start`
 ## Getting Started
 1.  `npm install`
-2.  Modify the `config.json`
+2.  edit `config.json` file
 ```
 {
     "siteName": "early spring",  //site name
