@@ -1,5 +1,19 @@
 # MarkdownReader
 MarkdownReader
+## 這是蝦咪碗糕
+這是一個利用 node.js 將資料夾內的 markdown 檔案變成一個精美的網頁
+## What is this
+...
+## 功能
+- 密碼登入
+- 自動重整
+- 繁體化文章
+- 自訂網站名稱
+- 自訂網站 Port
+- 自訂載入資料位置
+- 自訂一頁顯示多少文章
+## Features
+...
 ## 開始使用
 1. `npm install`
 2. 修改 `config.json`
