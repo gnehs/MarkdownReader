@@ -10,14 +10,14 @@ mixin statistic(label,ssclass,value)
 include _header.pug
 include _nav.pug
 .ts.narrow.container
-	h1.ts.header=title
+	h1.ts.header=lang.index.welcome.before+title+lang.index.welcome.after
 	.ts.four.cards
-		+statistic('Site Port','12',config.sitePort)
-		+statistic('Password Status',isTrue(config.password.status,'positive','negative'),isTrue(config.password.status,'On','Off'))
-		+statistic('Password','',config.password.password)
-		+statistic('Auto Refresh','',config.autoRefresh+'min')
-		+statistic('Allow Refresh',isTrue(config.allowRefresh.status,'positive','negative'),isTrue(config.allowRefresh,'Yes','No'))
-		+statistic('Posts','',data.length)
-		+statistic('Post Per Page','',config.postPerPage)
+		+statistic(lang.index.sitePort,'',config.sitePort)
+		+statistic(lang.index.passwordStatus,isTrue(config.password.status,'positive','negative'),isTrue(config.password.status,lang.other.on,lang.other.off))
+		+statistic(lang.index.password,'',config.password.password)
+		+statistic(lang.index.autoRefresh,'',config.autoRefresh+lang.clock.min)
+		+statistic(lang.index.allowRefresh,isTrue(config.allowRefresh.status,'positive','negative'),isTrue(config.allowRefresh,lang.other.yes,lang.other.no))
+		+statistic(lang.index.posts,'',data.length)
+		+statistic(lang.index.postPerPage,'',config.postPerPage)
 		
 include _footer.pug

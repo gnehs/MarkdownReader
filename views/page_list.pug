@@ -1,7 +1,7 @@
 include _header.pug
 include _nav.pug
 .ts.container
-    h3.ts.header='Page '+nowPage+' of '+totalPage
+    h3.ts.header=lang.page.nowPage.before+nowPage+lang.page.nowPage.middle+totalPage+lang.page.nowPage.after
     .ts.divided.relaxed.items
         if(data)
             each item in data
@@ -13,8 +13,8 @@ include _nav.pug
         else
             .item
                 .content
-                    .header 錯誤
-                    .description 這裡沒有任何資料
+                    .header=lang.error.error
+                    .description=lang.error.nothingHere
     #pageSelections.ts.separated.primary.compact.buttons
         -var firstPage=nowPage-5
         -var lastPage=nowPage+5

@@ -6,9 +6,9 @@ include _nav.pug
     if(post)
         #content.ts.basic.segment!=postContent
     else
-        #content.ts.basic.segment 無內文
+        #content.ts.basic.segment=lang.error.nothingHere
 
     button.ts.fluid.labeled.icon.button(onclick='history.back()')
         i.arrow.left.icon
-        | 回上頁
+        =lang.post.back
 include _footer.pug

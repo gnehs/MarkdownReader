@@ -1,7 +1,7 @@
 #nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
     .ts.container
-        a.item(href='/') Home
-        a.item(href='/page/1') Post
+        a.item(href='/')=lang.nav.home
+        a.item(href='/page/1')=lang.nav.post
         .right.fitted.item
             if(nowPage)
                 -if(page=='page')
@@ -19,4 +19,4 @@
             -if(page=='page'&&allowRefresh)
                 a.item(href='/refresh/')
                     i.icon.refresh
-                    | Refresh
+                    =lang.nav.refresh

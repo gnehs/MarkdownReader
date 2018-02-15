@@ -1,0 +1,53 @@
+{
+    "error": {
+        "error": "錯誤",
+        "error_404": "沒找到任何東東",
+        "error_500": "伺服器爆炸ㄌ",
+        "nothingHere": "這裡沒啥東西"
+    },
+    "index": {
+        "welcome": {
+            "before": "歡迎來到 ",
+            "after": "！"
+        },
+        "sitePort": "網站 Port",
+        "passwordStatus": "密碼狀態",
+        "password": "密碼",
+        "autoRefresh": "自動重整",
+        "allowRefresh": "允許手動重整",
+        "posts": "文章",
+        "postPerPage": "一頁顯示文章數目"
+    },
+    "nav": {
+        "home": "首頁",
+        "post": "文章",
+        "refresh": "重整"
+    },
+    "login": {
+        "header": "阿囉哈！",
+        "subHeader": "請輸入密碼登入",
+        "errorHeader": "哎呀！",
+        "password": "密碼",
+        "wrongPassword": "看來你輸入了錯誤的密碼",
+        "loginButton": "登入"
+    },
+    "page": {
+        "nowPage": {
+            "before": "",
+            "middle": "／",
+            "after": " 頁"
+        }
+    },
+    "post": {
+        "back": "回前頁"
+    },
+    "clock": {
+        "min": "分"
+    },
+    "other": {
+        "on": "開啟",
+        "off": "關閉",
+        "yes": "是",
+        "no": "否"
+    }
+}

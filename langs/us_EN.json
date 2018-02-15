@@ -1,0 +1,53 @@
+{
+    "error": {
+        "error": "Error",
+        "error_404": "File or Directory not found",
+        "error_500": "Internal Server Error",
+        "nothingHere": "Nothing here"
+    },
+    "index": {
+        "welcome": {
+            "before": "Welcome to ",
+            "after": "!"
+        },
+        "sitePort": "Site Port",
+        "passwordStatus": "Password Status",
+        "password": "Password",
+        "autoRefresh": "Auto Refresh",
+        "allowRefresh": "Allow Refresh",
+        "posts": "Posts",
+        "postPerPage": "Post Per Page"
+    },
+    "nav": {
+        "home": "Home",
+        "post": "Post",
+        "refresh": "Refresh"
+    },
+    "login": {
+        "header": "Hi!",
+        "subHeader": "Please enter the password to login the system",
+        "errorHeader": "Hey!",
+        "password": "Password",
+        "wrongPassword": "You've entered the wrong password",
+        "loginButton": "Login"
+    },
+    "page": {
+        "nowPage": {
+            "before": "Page ",
+            "middle": " of ",
+            "after": ""
+        }
+    },
+    "post": {
+        "back": "Back"
+    },
+    "clock": {
+        "min": "min"
+    },
+    "other": {
+        "on": "On",
+        "off": "Off",
+        "yes": "Yes",
+        "no": "No"
+    }
+}

@@ -4,7 +4,7 @@
 const fs = require('fs'); //檔案系統
 const excerpt = require("html-excerpt"); // 取摘要
 const config = require("./config.json"); // 設定
-const lang = require("./langs/" + config.lang); // Lang
+const lang = require("./langs/" + config.lang + '.json'); // Lang
 const schedule = require('node-schedule'); // 排程表
 
 
@@ -136,14 +136,23 @@ app.get('/refresh/', (req, res) => {
 });
 app.get('/login/', (req, res) => {
     if (config.password.status)
-        res.render('login', { title: config.siteName, page: 'login' })
+        res.render('login', {
+            title: config.siteName,
+            lang: lang,
+            page: 'login'
+        })
     else
         res.redirect("/")
 });
 app.post('/login/', (req, res) => {
     req.session.pass = req.body['userPASS']
     if (req.body['userPASS'] != config.password.password && config.password.status)
-        res.render('login', { title: config.siteName, page: 'login', message: '密碼錯誤，登入失敗' })
+        res.render('login', {
+            title: config.siteName,
+            page: 'login',
+            lang: lang,
+            message: lang.login.wrongPassword
+        })
     else
         res.redirect("/")
 });
@@ -167,11 +176,11 @@ app.get('/post/:id', (req, res) => {
     });
 });
 app.use((req, res, next) => {
-    res.status(404).render('error', { title: 'Error 404', message: 'File or Directory not found', page: 'error' })
+    res.status(404).render('error', { title: lang.error.error + ' 404', message: lang.error.error_404, page: 'error' })
 });
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).render('error', { title: 'Error 500', message: 'Internal Server Error', page: 'error' })
+    res.status(500).render('error', { title: lang.error.error + ' 500', message: lang.error.error_500, page: 'error' })
 }); // error
 
 app.listen(config.sitePort, () => {

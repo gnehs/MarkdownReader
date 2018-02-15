@@ -5,10 +5,10 @@
     "allowRefresh": false,
     "autoRefresh": 60,
     "password": {
-        "status": false,
+        "status": true,
         "password": "1069"
     },
     "postPerPage": 18,
     "sessionSecret": "ㄐㄐ讚1069",
-    "lang": "EN.json"
+    "lang": "zh_TW"
 }
