@@ -16,7 +16,8 @@
         "autoRefresh": "Auto Refresh",
         "allowRefresh": "Allow Refresh",
         "posts": "Posts",
-        "postPerPage": "Post Per Page"
+        "postPerPage": "Post Per Page",
+        "lang": "Lang"
     },
     "nav": {
         "home": "Home",

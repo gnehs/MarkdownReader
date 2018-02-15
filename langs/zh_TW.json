@@ -16,7 +16,8 @@
         "autoRefresh": "自動重整",
         "allowRefresh": "允許手動重整",
         "posts": "文章",
-        "postPerPage": "一頁顯示文章數目"
+        "postPerPage": "一頁顯示文章數目",
+        "lang": "目前語言"
     },
     "nav": {
         "home": "首頁",

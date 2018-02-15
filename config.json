@@ -5,7 +5,7 @@
     "allowRefresh": false,
     "autoRefresh": 60,
     "password": {
-        "status": true,
+        "status": false,
         "password": "1069"
     },
     "postPerPage": 18,

@@ -19,5 +19,6 @@ include _nav.pug
 		+statistic(lang.index.allowRefresh,isTrue(config.allowRefresh.status,'positive','negative'),isTrue(config.allowRefresh,lang.other.yes,lang.other.no))
 		+statistic(lang.index.posts,'',data.length)
 		+statistic(lang.index.postPerPage,'',config.postPerPage)
+		+statistic(lang.index.lang,'',config.lang)
 		
 include _footer.pug
