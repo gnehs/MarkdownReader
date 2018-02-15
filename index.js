@@ -4,6 +4,7 @@
 const fs = require('fs'); //檔案系統
 const excerpt = require("html-excerpt"); // 取摘要
 const config = require("./config.json"); // 設定
+const lang = require("./langs/" + config.lang); // Lang
 const schedule = require('node-schedule'); // 排程表
 
 
@@ -78,8 +79,15 @@ function pushPosts(data) {
 app.get('/', (req, res) => {
     if (req.session.pass != config.password.password && config.password.status)
         res.redirect("/login/")
-    else
-        res.redirect("/page/1")
+    else {
+        res.render('index', {
+            title: config.siteName,
+            data: posts,
+            config: config,
+            lang: lang,
+            page: 'home',
+        })
+    }
 });
 app.get('/page/:id', (req, res) => {
     let page = Number(req.params.id)
@@ -97,6 +105,27 @@ app.get('/page/:id', (req, res) => {
         page: 'page',
         totalPage: getPage(page).pages,
         allowRefresh: config.allowRefresh,
+        lang: lang,
+        nowPage: page
+    })
+});
+app.get('/page/list/:id', (req, res) => {
+    let page = Number(req.params.id)
+    if (req.session.pass != config.password.password && config.password.status) {
+        res.redirect("/login/")
+        return
+    }
+    if (getPage(1).pages < req.params.id || !Number.isInteger(page) || page < 1) {
+        res.redirect("/page/list/1")
+        return
+    }
+    res.render('page_list', {
+        title: config.siteName,
+        data: getPage(page).postExport,
+        page: 'page_list',
+        totalPage: getPage(page).pages,
+        allowRefresh: config.allowRefresh,
+        lang: lang,
         nowPage: page
     })
 });
@@ -132,6 +161,7 @@ app.get('/post/:id', (req, res) => {
             title: opencc.convertSync(req.params.id.split(".")[0]) + ' - ' + config.siteName,
             postTitle: opencc.convertSync(req.params.id.split(".")[0]),
             postContent: opencc.convertSync(post),
+            lang: lang,
             page: 'post'
         })
     });

@@ -9,5 +9,6 @@
         "password": "1069"
     },
     "postPerPage": 18,
-    "sessionSecret": "ㄐㄐ讚1069"
+    "sessionSecret": "ㄐㄐ讚1069",
+    "lang": "EN.json"
 }

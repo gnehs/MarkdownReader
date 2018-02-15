@@ -1,8 +1,22 @@
 #nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
     .ts.container
         a.item(href='/') Home
+        a.item(href='/page/1') Post
         .right.fitted.item
-            if(page=='page'&&allowRefresh)
+            if(nowPage)
+                -if(page=='page')
+                    a.active.item
+                        i.icon.block.layout
+                -else
+                    a.item(href='/page/'+nowPage)
+                        i.icon.block.layout
+                -if(page=='page_list')
+                    a.active.item
+                        i.icon.list.layout
+                -else
+                    a.item(href='/page/list/'+nowPage)
+                        i.icon.list.layout
+            -if(page=='page'&&allowRefresh)
                 a.item(href='/refresh/')
                     i.icon.refresh
                     | Refresh

@@ -1,0 +1,23 @@
+-function isTrue(s,y,n){if(s){return y}else{return n}}
+
+mixin statistic(label,ssclass,value)
+	.ts.card
+		.padded.center.aligned.content
+			.ts.primary.statistic(class=ssclass) 
+				.value=value
+				.label=label
+
+include _header.pug
+include _nav.pug
+.ts.narrow.container
+	h1.ts.header=title
+	.ts.four.cards
+		+statistic('Site Port','12',config.sitePort)
+		+statistic('Password Status',isTrue(config.password.status,'positive','negative'),isTrue(config.password.status,'On','Off'))
+		+statistic('Password','',config.password.password)
+		+statistic('Auto Refresh','',config.autoRefresh+'min')
+		+statistic('Allow Refresh',isTrue(config.allowRefresh.status,'positive','negative'),isTrue(config.allowRefresh,'Yes','No'))
+		+statistic('Posts','',data.length)
+		+statistic('Post Per Page','',config.postPerPage)
+		
+include _footer.pug

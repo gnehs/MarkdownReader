@@ -43,7 +43,12 @@ header .header {
     border-radius: 4px;
 }
 
-#nav a.item:hover {
+#nav .right a.item {
+    margin-right: 5px;
+}
+
+#nav a.item:hover,
+#nav a.active.item {
     background: rgba(0, 0, 0, 0.07);
 }
 
