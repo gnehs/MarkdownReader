@@ -176,11 +176,21 @@ app.get('/post/:id', (req, res) => {
     });
 });
 app.use((req, res, next) => {
-    res.status(404).render('error', { title: lang.error.error + ' 404', message: lang.error.error_404, page: 'error' })
+    res.status(404).render('error', {
+        title: lang.error.error + ' 404',
+        message: lang.error.error_404,
+        lang: lang,
+        page: 'error'
+    })
 });
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).render('error', { title: lang.error.error + ' 500', message: lang.error.error_500, page: 'error' })
+    res.status(500).render('error', {
+        title: lang.error.error + ' 500',
+        message: lang.error.error_500,
+        lang: lang,
+        page: 'error'
+    })
 }); // error
 
 app.listen(config.sitePort, () => {
