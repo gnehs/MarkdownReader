@@ -39,6 +39,9 @@
             "after": " 頁"
         }
     },
+    "search": {
+        "nowSearch": "目前搜尋："
+    },
     "post": {
         "back": "回前頁"
     },

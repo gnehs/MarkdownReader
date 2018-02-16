@@ -1,7 +1,10 @@
 include _header.pug
 include _nav.pug
 .ts.container
-    h3.ts.header=lang.page.nowPage.before+nowPage+lang.page.nowPage.middle+totalPage+lang.page.nowPage.after
+    -if(page=='search'||page=='search_list')
+        h3.ts.header=lang.search.nowSearch+nowPage
+    -else
+        h3.ts.header=lang.page.nowPage.before+nowPage+lang.page.nowPage.middle+totalPage+lang.page.nowPage.after
     .ts.divided.relaxed.items
         if(data)
             each item in data

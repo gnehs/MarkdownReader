@@ -39,6 +39,9 @@
             "after": ""
         }
     },
+    "search": {
+        "nowSearch": "Now search: "
+    },
     "post": {
         "back": "Back"
     },

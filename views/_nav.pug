@@ -4,14 +4,21 @@
         a.item(href='/page/1')=lang.nav.post
         .right.fitted.item
             if(nowPage)
-                -if(page=='page')
+                -if(page=='page'||page=='search')
                     a.active.item
+                        i.icon.block.layout
+                -else if(page=='search_list')
+                    a.item(href='/search/'+nowPage)
                         i.icon.block.layout
                 -else
                     a.item(href='/page/'+nowPage)
                         i.icon.block.layout
-                -if(page=='page_list')
+                        
+                -if(page=='page'||page=='search_list')
                     a.active.item
+                        i.icon.list.layout
+                -else if(page=='search')
+                    a.item(href='/search/list/'+nowPage)
                         i.icon.list.layout
                 -else
                     a.item(href='/page/list/'+nowPage)
