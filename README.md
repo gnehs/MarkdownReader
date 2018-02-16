@@ -16,8 +16,15 @@ MarkdownReader
 - 自訂網站 Port
 - 自訂載入資料位置
 - 自訂一頁顯示多少文章
+- 搜尋(製作中)
 ## Features
-...
+- Password
+- Auto refresh
+- Custom website name
+- Custom website Port
+- Custom data loading position
+- Custom display how many articles on a page
+- Search (in production)
 ## 開始使用
 1. `npm install`
 2. 修改 `config.json`
