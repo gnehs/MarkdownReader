@@ -1,9 +1,9 @@
 -function isTrue(s,y,n){if(s){return y}else{return n}}
 
-mixin statistic(label,ssclass,value)
+mixin statistic(label,theClass,value)
 	.ts.card
 		.padded.center.aligned.content
-			.ts.primary.statistic(class=ssclass) 
+			.ts.primary.statistic(class=theClass) 
 				.value=value
 				.label=label
 
