@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/gnehs/MarkdownReader/blob/master/icon/icon.png?raw=true">
+  <img src="https://github.com/gnehs/MarkdownReader/blob/master/icon/icon.png?raw=true" width="500px">
 </p>
 
 # MarkdownReader
