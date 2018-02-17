@@ -172,19 +172,42 @@ menu
     border-radius: 2px;
     height: 40px;
     line-height: 40px;
-    transition: .1s;
-    transition-timing-function: ease-in-out;
-}
-
-#menu.changeing .button:not(.top) {
-    opacity: 0;
-    transform: scale(.5);
 }
 
 #menu .button.top {
     width: 60px;
+    background-color: white;
 }
 
 #menu .button.nowChapter {
-    transform: scale(1.4);
+    color: #1000ff;
+    transition: .6s;
+    transition-delay: .4s;
+    transition-timing-function: ease-in-out;
+}
+
+#menu.changeing.toPrevious .button:not(.top) {
+    animation: moveLeft.4s linear infinite;
+}
+
+#menu.changeing.toNext .button:not(.top) {
+    animation: moveRight .4s linear infinite;
+}
+
+@keyframes moveLeft {
+    from {
+        transform: translateX(-120px);
+    }
+    to {
+        transform: translateX(0px);
+    }
+}
+
+@keyframes moveRight {
+    from {
+        transform: translateX(120px);
+    }
+    to {
+        transform: translateX(0px);
+    }
 }

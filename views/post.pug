@@ -12,9 +12,9 @@ include _nav.pug
         i.icon.caret.left
         =lang.post.back
 include _footer.pug
-#menu
+#menu(data-no-instant)
     a.button.previousChapter
     a.button.nowChapter
     a.button.nextChapter
-    a.button.top(href="#top")
+    a.button.top(data-scroll='0')
         i.icon.caret.up
