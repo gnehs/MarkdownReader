@@ -11,7 +11,7 @@ include _header.pug
 include _nav.pug
 .ts.narrow.container
 	h1.ts.header=lang.index.welcome.before+title+lang.index.welcome.after
-	.ts.four.cards
+	.ts.four.doubling.cards
 		+statistic(lang.index.sitePort,'',config.sitePort)
 		+statistic(lang.index.passwordStatus,isTrue(config.password.status,'positive','negative'),isTrue(config.password.status,lang.other.on,lang.other.off))
 		+statistic(lang.index.password,'',config.password.password)
