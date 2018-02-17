@@ -17,6 +17,7 @@ $(document).ready(function() {
         easing: 'linear' // The CSS3 easing function of the ripple
     });
     $('#content h1,#content h2,#content h3,#content h4,#content h5,#content h6').attr("class", "ts header")
+    headerImg()
     InstantClick.init()
 });
 
