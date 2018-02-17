@@ -13,7 +13,7 @@ kbd {
 
 
 /*===========
-    Header
+Header
 ===========*/
 
 header {
@@ -27,7 +27,7 @@ header .header {
 
 
 /*==========
-    NAV
+NAV
 ==========*/
 
 #nav {
@@ -84,7 +84,7 @@ pageSelections
 
 
 /*=============
-    文章內文
+文章內文
 =============*/
 
 #content,
@@ -122,4 +122,69 @@ pageSelections
     background: #f6f6f6;
     padding: 5px;
     border-radius: 5px
+}
+
+
+/*=============
+footer
+=============*/
+
+footer {
+    margin-bottom: 80px
+}
+
+
+/*=============
+menu
+=============*/
+
+#menu {
+    position: fixed;
+    bottom: 5px;
+    width: 420px;
+    height: 40px;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    left: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0 0 7px #0000002b;
+    background-color: white;
+    z-index: 99;
+    transition: .4s;
+    transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1.79);
+}
+
+#menu:not(.show) {
+    transform: translateY(70px);
+}
+
+#menu .button {
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    width: 120px;
+    margin: 0;
+    text-align: center;
+    display: inline-block;
+    border-radius: 2px;
+    height: 40px;
+    line-height: 40px;
+    transition: .1s;
+    transition-timing-function: ease-in-out;
+}
+
+#menu.changeing .button:not(.top) {
+    opacity: 0;
+    transform: scale(.5);
+}
+
+#menu .button.top {
+    width: 60px;
+}
+
+#menu .button.nowChapter {
+    transform: scale(1.4);
 }

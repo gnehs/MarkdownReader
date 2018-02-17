@@ -43,10 +43,6 @@ converter.setOption('tasklists', true);
 converter.setOption('emoji', true);
 converter.setOption('openLinksInNewWindow', true);
 
-
-//getPosts
-getPosts();
-
 function getFileList() {
     return fs.readdirSync(config.dataURL);
 }
@@ -297,8 +293,13 @@ app.use((err, req, res, next) => {
     })
 }); // error
 
+//============
+//   Start
+//============
 app.listen(config.sitePort, () => {
     console.log('\n' + config.siteName)
     console.log(Date())
     console.log("working on http://localhost:" + config.sitePort + '\n')
+        //getPosts
+    getPosts();
 })

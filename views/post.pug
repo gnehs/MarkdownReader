@@ -9,6 +9,12 @@ include _nav.pug
         #content.ts.basic.segment=lang.error.nothingHere
 
     button.ts.fluid.labeled.icon.button(onclick='history.back()')
-        i.arrow.left.icon
+        i.icon.caret.left
         =lang.post.back
 include _footer.pug
+#menu
+    a.button.previousChapter
+    a.button.nowChapter
+    a.button.nextChapter
+    a.button.top(href="#top")
+        i.icon.caret.up
