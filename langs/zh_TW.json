@@ -8,7 +8,8 @@
     "index": {
         "welcome": {
             "before": "歡迎來到 ",
-            "after": "！"
+            "after": "！",
+            "subHeader": "(･ิω･ิ)( ･ิϖ･ิ)(*>_<*)ﾉ"
         },
         "sitePort": "網站 Port",
         "passwordStatus": "密碼狀態",

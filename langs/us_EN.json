@@ -8,7 +8,8 @@
     "index": {
         "welcome": {
             "before": "Welcome to ",
-            "after": "!"
+            "after": "!",
+            "subHeader": "(･ิω･ิ)( ･ิϖ･ิ)(*>_<*)ﾉ"
         },
         "sitePort": "Site Port",
         "passwordStatus": "Password Status",
