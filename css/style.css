@@ -180,9 +180,10 @@ menu
     transition-timing-function: ease-in-out;
 }
 
-#menu .button[data-scroll="N/A"],
-#menu .button[data-scroll="N/A"]:hover {
+#menu .button[data-scroll="N/A"] {
     color: #dedede;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 #menu .button:hover {

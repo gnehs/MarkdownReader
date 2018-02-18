@@ -10,7 +10,7 @@ $(document).ready(function() {
         color: "auto", // Set the background color. If set to "auto", it will use the text color
         multi: true, // Allow multiple ripples per element
 
-        duration: 0.4, // The duration of the ripple
+        duration: 0.25, // The duration of the ripple
 
         // Filter function for modifying the speed of the ripple
         rate: function(pxPerSecond) {
