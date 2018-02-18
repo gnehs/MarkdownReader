@@ -35,8 +35,8 @@
     },
     "page": {
         "nowPage": {
-            "before": "",
-            "middle": "／",
+            "before": "第 ",
+            "middle": " 頁，共 ",
             "after": " 頁"
         }
     },

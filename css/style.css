@@ -88,6 +88,7 @@ pageSelections
 
 #content,
 #content p {
+    text-indent: 2em;
     font-size: 16px;
     color: rgb(80, 80, 80);
     line-height: 1.5em;
@@ -167,14 +168,21 @@ menu
     user-select: none;
     width: 115px;
     margin: 0;
+    text-overflow: ellipsis;
     text-align: center;
     display: inline-block;
+    white-space: nowrap;
     height: 35px;
     margin: 2.5px;
     line-height: 35px;
     border-radius: 5px;
     transition: .1s;
     transition-timing-function: ease-in-out;
+}
+
+#menu .button[data-scroll="N/A"],
+#menu .button[data-scroll="N/A"]:hover {
+    color: #dedede;
 }
 
 #menu .button:hover {
@@ -191,11 +199,11 @@ menu
 }
 
 #menu.changeing.toPrevious .button:not(.top) {
-    animation: moveLeft .3s ease;
+    animation: moveLeft .2s ease;
 }
 
 #menu.changeing.toNext .button:not(.top) {
-    animation: moveRight .3s ease;
+    animation: moveRight .2s ease;
 }
 
 @keyframes moveLeft {

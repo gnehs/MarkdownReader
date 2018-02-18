@@ -28,6 +28,9 @@ $(document).ready(function() {
 
 function menuClick() {
     $('#menu a').click(function() {
+        if ($(this).attr('data-scroll') == 'N/A') {
+            return
+        }
         // 讓捲軸用動畫的方式移動到 0 的位置
         // 感謝網友 sam 修正 Opera 問題
         var $body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
@@ -69,21 +72,21 @@ function scrollspy() {
             $('#menu').addClass('toPrevious')
         }
         $('#menu').addClass('changeing')
-        setTimeout(function() { $('#menu').removeClass('changeing toNext toPrevious') }, 400);
+        setTimeout(function() { $('#menu').removeClass('changeing toNext toPrevious') }, 200 + 1);
     }
 
     if (previousChapter == undefined || previousChapter.length == 0)
-        $('#menu .previousChapter').text('-').attr('data-scroll', '')
+        $('#menu .previousChapter').text('-').attr('data-scroll', 'N/A')
     else
         $('#menu .previousChapter').text(previousChapter.text()).attr('data-scroll', previousChapter.offset().top);
 
     if (nowChapter == undefined || nowChapter.length == 0)
-        $('#menu .nowChapter').text('-').attr('data-scroll', '#!')
+        $('#menu .nowChapter').text('-').attr('data-scroll', 'N/A')
     else
         $('#menu .nowChapter').text(nowChapter.text()).attr('data-scroll', nowChapter.offset().top)
 
     if (nextChapter == undefined || nextChapter.length == 0)
-        $('#menu .nextChapter').text('-').attr('data-scroll', '')
+        $('#menu .nextChapter').text('-').attr('data-scroll', 'N/A')
     else
         $('#menu .nextChapter').text(nextChapter.text()).attr('data-scroll', nextChapter.offset().top)
 }
