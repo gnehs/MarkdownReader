@@ -74,7 +74,6 @@ pageSelections
 }
 
 #pageSelections .ts.button {
-    width: 45px !important;
     margin-top: 20px !important;
     transition: box-shadow 0.25s linear;
     overflow: hidden;
@@ -162,36 +161,41 @@ menu
 }
 
 #menu .button {
+    color: #adadad;
     overflow: hidden;
     cursor: pointer;
     user-select: none;
-    width: 120px;
+    width: 115px;
     margin: 0;
     text-align: center;
     display: inline-block;
-    border-radius: 2px;
-    height: 40px;
-    line-height: 40px;
+    height: 35px;
+    margin: 2.5px;
+    line-height: 35px;
+    border-radius: 5px;
+    transition: .1s;
+    transition-timing-function: ease-in-out;
+}
+
+#menu .button:hover {
+    color: #656565;
 }
 
 #menu .button.top {
-    width: 60px;
+    width: 55px;
     background-color: white;
 }
 
 #menu .button.nowChapter {
-    color: #1000ff;
-    transition: .6s;
-    transition-delay: .4s;
-    transition-timing-function: ease-in-out;
+    color: #2d2d2d;
 }
 
 #menu.changeing.toPrevious .button:not(.top) {
-    animation: moveLeft.4s linear infinite;
+    animation: moveLeft .3s ease;
 }
 
 #menu.changeing.toNext .button:not(.top) {
-    animation: moveRight .4s linear infinite;
+    animation: moveRight .3s ease;
 }
 
 @keyframes moveLeft {
