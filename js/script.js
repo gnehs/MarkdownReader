@@ -107,3 +107,16 @@ function headerImg() {
     $('#headerImg').attr('src', headerImg)
         //document.write('<img src="' + headerImg + '">');
 }
+
+function searchPosts(search, searchde) {
+    swal({
+            title: search,
+            text: searchde,
+            content: "input",
+        })
+        .then((value) => {
+            if (value) {
+                location.href = "/search/card/" + value
+            }
+        });
+}

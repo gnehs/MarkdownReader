@@ -44,7 +44,9 @@
         }
     },
     "search": {
-        "nowSearch": "Now search: "
+        "nowSearch": "Current search：",
+        "search": "Search",
+        "searchde": "Enter keywords to search"
     },
     "post": {
         "back": "Back"

@@ -44,7 +44,9 @@
         }
     },
     "search": {
-        "nowSearch": "目前搜尋："
+        "nowSearch": "目前搜尋：",
+        "search": "搜尋",
+        "searchde": "輸入關鍵字來搜尋"
     },
     "post": {
         "back": "回前頁"

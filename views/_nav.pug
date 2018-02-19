@@ -34,7 +34,7 @@
                         i.icon.list.layout
                         =lang.nav.list
             
-            a.item(data-search)
+            a.item(data-search,onclick='searchPosts("' + lang.search.search+'","'+lang.search.searchde  +'")')
                 i.icon.search
                 =lang.nav.search
             -if(page=='page'&&allowRefresh)
