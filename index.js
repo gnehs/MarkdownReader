@@ -237,16 +237,23 @@ function searchFiles(content) {
     return search
 
 }
-app.get('/search/:id', (req, res) => {
-    let search = req.params.id.split(" ")
+app.get('/search/:type/:id', (req, res) => {
+    var search = req.params.id
+    var type = req.params.type
+    if (type == 'list')
+        var renderFile = 'page_list',
+            page = 'search_list'
+    else
+        var renderFile = 'page',
+            page = 'search'
     if (req.session.pass != config.password.password && config.password.status) {
         res.redirect("/login/")
         return
     }
-    res.render('page', {
+    res.render(renderFile, {
         title: config.siteName,
-        data: searchFiles(search),
-        page: 'search',
+        data: searchFiles(search.split(" ")),
+        page: page,
         totalPage: 1,
         allowRefresh: config.allowRefresh,
         lang: lang,
@@ -255,23 +262,6 @@ app.get('/search/:id', (req, res) => {
 
 });
 
-app.get('/search/list/:id', (req, res) => {
-    let search = req.params.id.split(" ")
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
-    res.render('page_list', {
-        title: config.siteName,
-        data: searchFiles(search),
-        page: 'search_list',
-        totalPage: 1,
-        allowRefresh: config.allowRefresh,
-        lang: lang,
-        nowPage: search
-    })
-
-});
 //============
 //   Error
 //============

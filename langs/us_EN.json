@@ -23,6 +23,9 @@
     "nav": {
         "home": "Home",
         "post": "Post",
+        "card": "Card",
+        "list": "List",
+        "search": "Search",
         "refresh": "Refresh"
     },
     "login": {

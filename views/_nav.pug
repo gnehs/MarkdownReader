@@ -1,28 +1,42 @@
 #nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
     .ts.container
-        a.item(href='/')=lang.nav.home
-        a.item(href='/page/1')=lang.nav.post
+        a.item(href='/')
+            i.icon.home
+            =lang.nav.home
+        a.item(href='/page/1')
+            i.icon.file.text
+            =lang.nav.post
         .right.fitted.item
             if(nowPage)
                 -if(page=='page'||page=='search')
                     a.active.item
                         i.icon.block.layout
+                        =lang.nav.card
                 -else if(page=='search_list')
-                    a.item(href='/search/'+nowPage)
+                    a.item(href='/search/card/'+nowPage)
                         i.icon.block.layout
+                        =lang.nav.card
                 -else
                     a.item(href='/page/'+nowPage)
                         i.icon.block.layout
+                        =lang.nav.card
                         
                 -if(page=='page_list'||page=='search_list')
                     a.active.item
                         i.icon.list.layout
+                        =lang.nav.list
                 -else if(page=='search')
                     a.item(href='/search/list/'+nowPage)
                         i.icon.list.layout
+                        =lang.nav.list
                 -else
                     a.item(href='/page/list/'+nowPage)
                         i.icon.list.layout
+                        =lang.nav.list
+            
+            a.item(data-search)
+                i.icon.search
+                =lang.nav.search
             -if(page=='page'&&allowRefresh)
                 a.item(href='/refresh/')
                     i.icon.refresh
