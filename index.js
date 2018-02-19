@@ -61,12 +61,7 @@ function getFileSummary(url, filename) {
 }
 
 function getFile(url, filename) {
-    var data = fs.readFileSync(url + filename);
-
-    post = opencc.convertSync(converter.makeHtml(data.toString()));
-    title = excerpt.text(opencc.convertSync(filename.split(".")[0]), 18, '...')
-    postSummary = excerpt.text(post, 128, '...').replace(new RegExp('<br />', "g"), '');
-    return post
+    return opencc.convertSync(converter.makeHtml(fs.readFileSync(url + filename).toString()));
 }
 
 
@@ -100,40 +95,27 @@ app.get('/', (req, res) => {
         })
     }
 });
-app.get('/page/:id', (req, res) => {
+app.get('/page/:type/:id', (req, res) => {
     let page = Number(req.params.id)
+    if (req.params.type == 'list') {
+        var renderFile = "page_list",
+            type = "list"
+    } else {
+        var renderFile = "page",
+            type = "card"
+    }
     if (req.session.pass != config.password.password && config.password.status) {
         res.redirect("/login/")
         return
     }
     if (getPage(1).pages < req.params.id || !Number.isInteger(page) || page < 1) {
-        res.redirect("/page/1")
+        res.redirect("/page/" + type + "/1")
         return
     }
-    res.render('page', {
+    res.render(renderFile, {
         title: config.siteName,
         data: getPage(page).postExport,
-        page: 'page',
-        totalPage: getPage(page).pages,
-        allowRefresh: config.allowRefresh,
-        lang: lang,
-        nowPage: page
-    })
-});
-app.get('/page/list/:id', (req, res) => {
-    let page = Number(req.params.id)
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
-    if (getPage(1).pages < req.params.id || !Number.isInteger(page) || page < 1) {
-        res.redirect("/page/list/1")
-        return
-    }
-    res.render('page_list', {
-        title: config.siteName,
-        data: getPage(page).postExport,
-        page: 'page_list',
+        page: renderFile,
         totalPage: getPage(page).pages,
         allowRefresh: config.allowRefresh,
         lang: lang,
@@ -145,6 +127,24 @@ app.get('/refresh/', (req, res) => {
     getPosts()
     res.redirect("/")
 });
+app.get('/post/:id', (req, res) => {
+    if (req.session.pass != config.password.password && config.password.status) {
+        res.redirect("/login/")
+        return
+    }
+    post = getFile(config.dataURL, req.params.id)
+    res.render('post', {
+        title: opencc.convertSync(req.params.id.split(".")[0]) + ' - ' + config.siteName,
+        postTitle: opencc.convertSync(req.params.id.split(".")[0]),
+        postContent: opencc.convertSync(post),
+        lang: lang,
+        page: 'post'
+    })
+});
+
+//============
+//    Login
+//============
 app.get('/login/', (req, res) => {
     if (config.password.status)
         res.render('login', {
@@ -166,20 +166,6 @@ app.post('/login/', (req, res) => {
         })
     else
         res.redirect("/")
-});
-app.get('/post/:id', (req, res) => {
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
-    post = getFile(config.dataURL, req.params.id)
-    res.render('post', {
-        title: opencc.convertSync(req.params.id.split(".")[0]) + ' - ' + config.siteName,
-        postTitle: opencc.convertSync(req.params.id.split(".")[0]),
-        postContent: opencc.convertSync(post),
-        lang: lang,
-        page: 'post'
-    })
 });
 
 //============
