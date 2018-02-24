@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . /app
 # Install app dependencies
 COPY package.json /app/
-RUN npm install --production
+RUN npm install
 
 
 EXPOSE 3014
