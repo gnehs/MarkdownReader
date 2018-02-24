@@ -1,0 +1,8 @@
+include _header.pug
+include _nav.pug
+.ts.very.narrow.container
+    .ts.action.fluid.input(style='margin:100px 20px')
+        input#search(type='text',placeholder=lang.search.searchde)
+        button.ts.button(onclick='searchPosts(\''+lang.search.searchde+'\')')=lang.search.search
+
+include _footer.pug

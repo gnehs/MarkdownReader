@@ -172,7 +172,6 @@ app.post('/login/', (req, res) => {
 // AutoRefresh
 //============
 setInterval(() => {
-    console.log('AutoRefresh');
     posts = [];
     getPosts();
 }, parseFloat(config.autoRefresh) * 1000 * 60)
@@ -198,9 +197,19 @@ function getPage(num) {
 //   Search
 //============
 
+app.get('/search/', (req, res) => {
+    if (req.session.pass != config.password.password && config.password.status) {
+        res.redirect("/login/")
+        return
+    }
+    res.render('search', {
+        title: lang.search.search + ' - ' + config.siteName,
+        lang: lang,
+        page: 'search'
+    })
+});
 
 function searchFiles(content) {
-    console.log(content)
     search = []
     var files = getFileList()
     for (i in files) {

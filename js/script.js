@@ -108,15 +108,12 @@ function headerImg() {
         //document.write('<img src="' + headerImg + '">');
 }
 
-function searchPosts(search, searchde) {
-    swal({
-            title: search,
-            text: searchde,
-            content: "input",
-        })
-        .then((value) => {
-            if (value) {
-                location.href = "/search/card/" + value
-            }
+function searchPosts(text) {
+    if ($('input#search').val() == "")
+        swal({
+            title: text,
+            icon: "warning",
         });
+    else
+        location.href = '/search/list/' + $('input#search').val();
 }

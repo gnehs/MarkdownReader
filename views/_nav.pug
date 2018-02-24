@@ -6,6 +6,9 @@
         a.item(href='/page/card/1')
             i.icon.file.text
             =lang.nav.post
+        a.item(href='/search/')
+            i.icon.search
+            =lang.nav.search
         .right.fitted.item
             if(nowPage)
                 -if(page=='page'||page=='search')
@@ -34,9 +37,6 @@
                         i.icon.list.layout
                         =lang.nav.list
             
-            a.item(data-search,onclick='searchPosts("' + lang.search.search+'","'+lang.search.searchde  +'")')
-                i.icon.search
-                =lang.nav.search
             -if(page=='page'&&allowRefresh)
                 a.item(href='/refresh/')
                     i.icon.refresh
