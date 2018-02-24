@@ -9,7 +9,7 @@ script(src='/js/login.js')
 		h1.ts.center.aligned.header=lang.login.header
 			.sub.header=lang.login.subHeader
 	#login.ts.centered.secondary.segment
-		form.ts.form(method='post',role='form',onsubmit='return check()')
+		form.ts.form(method='post',role='form',onsubmit='return check()',action='/login/')
 			.field
 				labelr=lang.login.password
 				input(type='password', placeholder='', id='userPASS', name='userPASS',required)

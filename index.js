@@ -96,6 +96,10 @@ app.get('/', (req, res) => {
     }
 });
 app.get('/page/:type/:id', (req, res) => {
+    if (req.session.pass != config.password.password && config.password.status) {
+        res.redirect("/login/")
+        return
+    }
     let page = Number(req.params.id)
     if (req.params.type == 'list') {
         var renderFile = "page_list",
@@ -103,10 +107,6 @@ app.get('/page/:type/:id', (req, res) => {
     } else {
         var renderFile = "page",
             type = "card"
-    }
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
     }
     if (getPage(1).pages < req.params.id || !Number.isInteger(page) || page < 1) {
         res.redirect("/page/" + type + "/1")
@@ -233,6 +233,10 @@ function searchFiles(content) {
 
 }
 app.get('/search/:type/:id', (req, res) => {
+    if (req.session.pass != config.password.password && config.password.status) {
+        res.redirect("/login/")
+        return
+    }
     var search = req.params.id
     var type = req.params.type
     if (type == 'list')
