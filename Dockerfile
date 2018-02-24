@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:latest
+FROM node:onbuild
 
 # Create app directory
 RUN mkdir -p /app
