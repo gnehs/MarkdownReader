@@ -49,14 +49,13 @@ function getFileList() {
 
 function getFileSummary(url, filename) {
     var data = fs.readFileSync(url + filename);
-
     post = opencc.convertSync(converter.makeHtml(data.toString()));
     title = excerpt.text(opencc.convertSync(filename.split(".")[0]), 18, '...')
     postSummary = excerpt.text(post, 128, '...').replace(new RegExp('<br />', "g"), '');
     return {
         'title': title,
         'summary': postSummary,
-        'link': '/post/' + filename,
+        'link': '/post/' + filename.split(".")[0],
     };
 }
 
@@ -70,7 +69,11 @@ function getPosts() {
     var files = getFileList()
     for (i in files) {
         let file2read = files[i]
-        let things2push = getFileSummary(config.dataURL, file2read)
+        if (file2read.indexOf('.') < 0) {
+            var things2push = getDirSummary(file2read)
+        } else {
+            var things2push = getFileSummary(config.dataURL, file2read)
+        }
         posts.push(things2push)
     }
     posts = posts.sort((a, b) => {
@@ -78,6 +81,20 @@ function getPosts() {
     });
 }
 
+function getDirList(url) {
+    return fs.readdirSync(config.dataURL + url + '/');
+}
+
+function getDirSummary(url) {
+    var dir = fs.readdirSync(config.dataURL + '/' + url + '/');
+    var summary = lang.page.folder + " / " + dir.toString()
+    return {
+        'title': url,
+        'summary': excerpt.text(summary, 128, '...'),
+        'link': '/dir/' + url + '/',
+        'icon': 'folder icon'
+    };
+}
 //============
 //    Main
 //============
@@ -132,10 +149,15 @@ app.get('/post/:id', (req, res) => {
         res.redirect("/login/")
         return
     }
-    post = getFile(config.dataURL, req.params.id)
+    if (req.params.id.indexOf('.') > -1) {
+        // ex: ../config.json => indexOf('.') = 0
+        res.redirect("/")
+        return
+    }
+    post = getFile(config.dataURL, req.params.id + '.md')
     res.render('post', {
-        title: opencc.convertSync(req.params.id.split(".")[0]) + ' - ' + config.siteName,
-        postTitle: opencc.convertSync(req.params.id.split(".")[0]),
+        title: opencc.convertSync(req.params.id) + ' - ' + config.siteName,
+        postTitle: opencc.convertSync(req.params.id),
         postContent: opencc.convertSync(post),
         lang: lang,
         page: 'post'
@@ -143,12 +165,27 @@ app.get('/post/:id', (req, res) => {
 });
 
 //============
+//    Dir
+//============
+app.get('/dir/:id', (req, res) => {
+    if (req.session.pass != config.password.password && config.password.status) {
+        res.redirect("/login/")
+        return
+    }
+    res.render('error', {
+        title: 'Preparing - ' + config.siteName,
+        message: '正在準備中',
+        lang: lang,
+        page: 'error'
+    })
+});
+//============
 //    Login
 //============
 app.get('/login/', (req, res) => {
     if (config.password.status)
         res.render('login', {
-            title: config.siteName,
+            title: lang.login.header + ' - ' + config.siteName,
             lang: lang,
             page: 'login'
         })

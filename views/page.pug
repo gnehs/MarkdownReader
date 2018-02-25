@@ -12,6 +12,9 @@ include _nav.pug
                     .content
                         .header=item.title
                         .description!=item.summary
+                    if(item.icon)
+                        .symbol
+                            i(class=item.icon)
         else
             .ts.card
                 .content

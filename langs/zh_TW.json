@@ -41,7 +41,8 @@
             "before": "第 ",
             "middle": " 頁，共 ",
             "after": " 頁"
-        }
+        },
+        "folder": "資料夾"
     },
     "search": {
         "nowSearch": "目前搜尋：",

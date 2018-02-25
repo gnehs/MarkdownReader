@@ -41,7 +41,8 @@
             "before": "Page ",
             "middle": " of ",
             "after": ""
-        }
+        },
+        "folder": "Folder"
     },
     "search": {
         "nowSearch": "Current search：",

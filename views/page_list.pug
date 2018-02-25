@@ -9,6 +9,8 @@ include _nav.pug
         if(data)
             each item in data
                 a.item(href=item.link)
+                    if(item.icon)
+                        i.large(class=item.icon)
                     .content
                         .header=item.title
                         .description!=item.summary
