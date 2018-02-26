@@ -15,12 +15,8 @@
                     a.active.item
                         i.icon.block.layout
                         =lang.nav.card
-                -else if(page=='search_list')
-                    a.item(href='/search/card/'+nowPage)
-                        i.icon.block.layout
-                        =lang.nav.card
                 -else
-                    a.item(href='/page/card/'+nowPage)
+                    a.item(href='../card/'+nowPage)
                         i.icon.block.layout
                         =lang.nav.card
                         
@@ -28,12 +24,8 @@
                     a.active.item
                         i.icon.list.layout
                         =lang.nav.list
-                -else if(page=='search')
-                    a.item(href='/search/list/'+nowPage)
-                        i.icon.list.layout
-                        =lang.nav.list
                 -else
-                    a.item(href='/page/list/'+nowPage)
+                    a.item(href='../list/'+nowPage)
                         i.icon.list.layout
                         =lang.nav.list
             

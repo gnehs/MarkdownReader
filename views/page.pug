@@ -33,7 +33,7 @@ include _nav.pug
         -for(var i=firstPage; i<lastPage+1; i++)
             -if(i<totalPage+1)
                 -if(i == nowPage)
-                    a.ts.active.button(href='/page/card/' +i)=i
+                    a.ts.active.button(href='./' +i)=i
                 -else
-                    a.ts.button(href='/page/card/' +i)=i
+                    a.ts.button(href='./' +i)=i
 include _footer.pug

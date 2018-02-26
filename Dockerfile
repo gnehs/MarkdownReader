@@ -1,4 +1,4 @@
-FROM node:onbuild
+FROM mhart/alpine-node:8
 
 # Create app directory
 RUN mkdir -p /app
@@ -7,8 +7,10 @@ WORKDIR /app
 COPY . /app
 # Install app dependencies
 COPY package.json /app/
-RUN npm install --production
+# If you have native dependencies, you'll need extra tools
+RUN apk add --no-cache make gcc g++ python
 
+RUN npm install --production
 
 EXPOSE 3014
 CMD ["npm", "start"]

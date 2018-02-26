@@ -43,10 +43,6 @@ converter.setOption('tasklists', true);
 converter.setOption('emoji', true);
 converter.setOption('openLinksInNewWindow', true);
 
-function getFileList() {
-    return fs.readdirSync(config.dataURL);
-}
-
 function getFileSummary(url, filename) {
     var data = fs.readFileSync(url + filename);
     post = opencc.convertSync(converter.makeHtml(data.toString()));
@@ -55,7 +51,7 @@ function getFileSummary(url, filename) {
     return {
         'title': title,
         'summary': postSummary,
-        'link': '/post/' + filename.split(".")[0],
+        'link': '/post/' + filename,
     };
 }
 
@@ -64,34 +60,39 @@ function getFile(url, filename) {
 }
 
 
-function getPosts() {
+function getDir(url = config.dataURL) {
     posts = []
-    var files = getFileList()
+    dirs = [{
+        "url": config.dataURL
+    }]
+    var files = fs.readdirSync(url);
     for (i in files) {
         let file2read = files[i]
-        if (file2read.indexOf('.') < 0) {
+        let stat = fs.statSync(url + files[i])
+        if (stat.isDirectory()) {
             var things2push = getDirSummary(file2read)
-        } else {
-            var things2push = getFileSummary(config.dataURL, file2read)
+        } else if (stat.isFile()) {
+            var things2push = getFileSummary(url, file2read)
         }
-        posts.push(things2push)
+        if (things2push)
+            posts.push(things2push)
     }
     posts = posts.sort((a, b) => {
         return a.title.localeCompare(b.title, "zh-TW");
     });
-}
-
-function getDirList(url) {
-    return fs.readdirSync(config.dataURL + url + '/');
+    return posts
 }
 
 function getDirSummary(url) {
-    var dir = fs.readdirSync(config.dataURL + '/' + url + '/');
+    var dir = fs.readdirSync(config.dataURL + url + '/');
     var summary = lang.page.folder + " / " + dir.toString()
+    dirs.push({
+        "url": config.dataURL + url + '/'
+    })
     return {
         'title': url,
         'summary': excerpt.text(summary, 128, '...'),
-        'link': '/dir/' + url + '/',
+        'link': '#',
         'icon': 'folder icon'
     };
 }
@@ -105,7 +106,7 @@ app.get('/', (req, res) => {
     else {
         res.render('index', {
             title: config.siteName,
-            data: posts,
+            data: getDir(),
             config: config,
             lang: lang,
             page: 'home',
@@ -140,8 +141,6 @@ app.get('/page/:type/:id', (req, res) => {
     })
 });
 app.get('/refresh/', (req, res) => {
-    posts = []
-    getPosts()
     res.redirect("/")
 });
 app.get('/post/:id', (req, res) => {
@@ -149,34 +148,13 @@ app.get('/post/:id', (req, res) => {
         res.redirect("/login/")
         return
     }
-    if (req.params.id.indexOf('.') > -1) {
-        // ex: ../config.json => indexOf('.') = 0
-        res.redirect("/")
-        return
-    }
-    post = getFile(config.dataURL, req.params.id + '.md')
+    post = getFile(config.dataURL, req.params.id)
     res.render('post', {
         title: opencc.convertSync(req.params.id) + ' - ' + config.siteName,
         postTitle: opencc.convertSync(req.params.id),
         postContent: opencc.convertSync(post),
         lang: lang,
         page: 'post'
-    })
-});
-
-//============
-//    Dir
-//============
-app.get('/dir/:id', (req, res) => {
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
-    res.render('error', {
-        title: 'Preparing - ' + config.siteName,
-        message: '正在準備中',
-        lang: lang,
-        page: 'error'
     })
 });
 //============
@@ -205,27 +183,20 @@ app.post('/login/', (req, res) => {
         res.redirect("/")
 });
 
-//============
-// AutoRefresh
-//============
-setInterval(() => {
-    posts = [];
-    getPosts();
-}, parseFloat(config.autoRefresh) * 1000 * 60)
 
 //============
 // pageSwitch
 //============
 
-function getPage(num) {
-    var pages = Math.ceil(posts.length / config.postPerPage); //算出所需頁數
+function getPage(num, thing = posts) {
+    var pages = Math.ceil(thing.length / config.postPerPage); //算出所需頁數
     if (num > pages) { return } //確定真的收到數字及收到的數字是否大於總頁數
     var firstPost = (num - 1) * config.postPerPage + 1 //輸出的第一個文章
     let postExport = []
     for (var i = 0; i < config.postPerPage; i++) {
         post = i + firstPost - 1
-        if (posts[post] != undefined)
-            postExport.push(posts[post])
+        if (thing[post] != undefined)
+            postExport.push(thing[post])
     }
     return { postExport, pages }
 }
@@ -248,7 +219,7 @@ app.get('/search/', (req, res) => {
 
 function searchFiles(content) {
     search = []
-    var files = getFileList()
+    var files = fs.readdirSync(config.dataURL);
     for (i in files) {
         var keywordCount = 0
         let file2read = files[i]
@@ -326,6 +297,5 @@ app.listen(config.sitePort, () => {
     console.log('\n' + config.siteName)
     console.log(Date())
     console.log("working on http://localhost:" + config.sitePort + '\n')
-        //getPosts
-    getPosts();
+    getDir()
 })
