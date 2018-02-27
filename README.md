@@ -53,5 +53,7 @@
 3. `npm start`
 ## Docker
 https://hub.docker.com/r/gnehs/markdownreader/
+
 `/app/config.json` 設定檔位置
+
 `/app/data/` 資料位置
