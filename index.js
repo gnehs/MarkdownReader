@@ -45,7 +45,7 @@ converter.setOption('openLinksInNewWindow', true);
 function getFileSummary(url, filename) {
     var data = fs.readFileSync(url + filename);
     post = opencc.convertSync(converter.makeHtml(data.toString()));
-    title = excerpt.text(opencc.convertSync(filename.split(".")[0]), 18, '...')
+    title = excerpt.text(opencc.convertSync(filename.replace(/\.[^.]+$/, '')), 18, '...')
     postSummary = excerpt.text(post, 128, '...').replace(new RegExp('<br />', "g"), '');
     return {
         'title': title,
@@ -148,9 +148,10 @@ app.get('/post/:id', (req, res) => {
         return
     }
     post = getFile(config.dataURL, req.params.id)
+    title = opencc.convertSync(req.params.id).replace(/\.[^.]+$/, '')
     res.render('post', {
-        title: opencc.convertSync(req.params.id) + ' - ' + config.siteName,
-        postTitle: opencc.convertSync(req.params.id),
+        title: title + ' - ' + config.siteName,
+        postTitle: title,
         postContent: opencc.convertSync(post),
         lang: lang,
         page: 'post'

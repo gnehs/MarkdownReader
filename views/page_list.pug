@@ -21,7 +21,7 @@ include _nav.pug
                     .description=lang.error.nothingHere
     #pageSelections.ts.buttons
         -for(i = 0; i < totalPage+4; i++)
-            -let page = nowPage - 4+i
+            -let page = nowPage - 4 + i
             -if(i<9 && page>0 && page<=totalPage)
                 -if(page == nowPage)
                     a.ts.active.button(href='./' +page)=page
