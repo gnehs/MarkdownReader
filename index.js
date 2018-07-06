@@ -5,7 +5,6 @@ const fs = require('fs'); //檔案系統
 const excerpt = require("html-excerpt"); // 取摘要
 const config = require("./config.json"); // 設定
 const lang = require("./langs/" + config.lang + '.json'); // Lang
-const schedule = require('node-schedule'); // 排程表
 
 
 // express
