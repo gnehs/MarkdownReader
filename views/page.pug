@@ -5,7 +5,7 @@ include _nav.pug
         h3.ts.header=lang.search.nowSearch+nowPage
     -else
         h3.ts.header=lang.page.nowPage.before+nowPage+lang.page.nowPage.middle+totalPage+lang.page.nowPage.after
-    .ts.doubling.three.cards
+    .ts.stackable.three.cards
         if(data)
             each item in data
                 a.ts.card(href=item.link)
