@@ -2,10 +2,8 @@
     "siteName": "MarkdownReader",
     "sitePort": 3014,
     "dataURL": "./data/",
-    "allowRefresh": false,
-    "autoRefresh": 60,
     "password": {
-        "status": false,
+        "enabled": false,
         "password": "1069"
     },
     "postPerPage": 18,

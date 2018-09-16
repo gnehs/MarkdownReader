@@ -1,8 +1,13 @@
 {
     "error": {
-        "error": "錯誤",
-        "error_404": "沒找到任何東東",
-        "error_500": "伺服器爆炸ㄌ",
+        "404": {
+            "title": "錯誤：404",
+            "message": "沒找到任何東東"
+        },
+        "500": {
+            "title": "錯誤：500",
+            "message": "伺服器爆炸ㄌ"
+        },
         "nothingHere": "這裡沒啥東西"
     },
     "index": {
@@ -11,6 +16,8 @@
             "after": "！",
             "subHeader": "早安安！"
         },
+        "websiteStatus": "網站狀態",
+        "recently": "最近新增",
         "sitePort": "網站 Port",
         "passwordStatus": "密碼狀態",
         "password": "密碼",
@@ -18,6 +25,7 @@
         "allowRefresh": "允許手動重整",
         "posts": "文章",
         "postPerPage": "一頁顯示文章數目",
+        "more": "查看更多",
         "lang": "目前語言"
     },
     "nav": {

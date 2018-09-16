@@ -6,7 +6,6 @@ const excerpt = require("html-excerpt"); // 取摘要
 const config = require("./config.json"); // 設定
 const lang = require("./langs/" + config.lang + '.json'); // Lang
 
-
 // express
 const express = require('express');
 const bodyParser = require('body-parser'); // 讀入 post 請求
@@ -27,12 +26,10 @@ app.use('/css', express.static('css'));
 app.use('/icon', express.static('icon'));
 
 //簡轉繁
-const OpenCC = require('opencc');
-const opencc = new OpenCC('s2twp.json');
+const opencc = new(require('opencc'))('s2twp.json');
 
 // Markdown viewer
-const showdown = require('showdown')
-const converter = new showdown.Converter()
+const converter = new(require('showdown')).Converter()
 converter.setOption('simplifiedAutoLink', true);
 converter.setOption('excludeTrailingPunctuationFromURLs', true);
 converter.setOption('simpleLineBreaks', true);
@@ -41,6 +38,7 @@ converter.setOption('tablesHeaderId', true);
 converter.setOption('tasklists', true);
 converter.setOption('emoji', true);
 converter.setOption('openLinksInNewWindow', true);
+
 
 function getFileSummary(url, filename) {
     var data = fs.readFileSync(url + filename);
@@ -70,13 +68,10 @@ function getDir(url = config.dataURL) {
     for (i in files) {
         let file2read = files[i]
         let stat = fs.statSync(url + files[i])
-        if (stat.isDirectory()) {
-            var things2push = getDirSummary(file2read)
-        } else if (stat.isFile()) {
-            var things2push = getFileSummary(url, file2read)
-        }
-        if (things2push)
-            posts.push(things2push)
+        if (stat.isDirectory())
+            posts.push(getDirSummary(file2read))
+        else if (stat.isFile())
+            posts.push(getFileSummary(url, file2read))
     }
     posts = posts.sort((a, b) => {
         return a.title.localeCompare(b.title, "zh-TW");
@@ -98,73 +93,11 @@ function getDirSummary(url) {
     };
 }
 //============
-//    Main
-//============
-
-app.get('/', (req, res) => {
-    if (req.session.pass != config.password.password && config.password.status)
-        res.redirect("/login/")
-    else {
-        res.render('index', {
-            title: config.siteName,
-            data: getDir(),
-            config: config,
-            lang: lang,
-            page: 'home',
-        })
-    }
-});
-app.get('/page/:type/:id', (req, res) => {
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
-    let page = Number(req.params.id)
-    if (req.params.type == 'list') {
-        var renderFile = "page_list",
-            type = "list"
-    } else {
-        var renderFile = "page",
-            type = "card"
-    }
-    if (getPage(1).pages < req.params.id || !Number.isInteger(page) || page < 1) {
-        res.redirect("/page/" + type + "/1")
-        return
-    }
-    res.render(renderFile, {
-        title: config.siteName,
-        data: getPage(page).postExport,
-        page: renderFile,
-        totalPage: getPage(page).pages,
-        allowRefresh: config.allowRefresh,
-        lang: lang,
-        nowPage: page
-    })
-});
-app.get('/refresh/', (req, res) => {
-    res.redirect("/")
-});
-app.get('/post/:id', (req, res) => {
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
-    post = getFile(config.dataURL, req.params.id)
-    title = opencc.convertSync(req.params.id).replace(/\.[^.]+$/, '')
-    res.render('post', {
-        title: title,
-        postTitle: title,
-        postContent: opencc.convertSync(post),
-        lang: lang,
-        page: 'post'
-    })
-});
-//============
 //    Login
 //============
 app
     .get('/login/', (req, res) => {
-        if (config.password.status)
+        if (config.password.enabled)
             res.render('login', {
                 title: lang.login.header + ' - ' + config.siteName,
                 lang: lang,
@@ -175,7 +108,7 @@ app
     })
     .post('/login/', (req, res) => {
         req.session.pass = req.body['userPASS']
-        if (req.body['userPASS'] != config.password.password && config.password.status)
+        if (req.body['userPASS'] != config.password.password && config.password.enabled)
             res.render('login', {
                 title: config.siteName,
                 page: 'login',
@@ -186,21 +119,65 @@ app
             res.redirect("/")
     });
 
+app.use((req, res, next) => {
+    if (req.session.pass != config.password.password && config.password.enabled)
+        res.redirect("/login/")
+    else
+        next()
+});
+//============
+//    Main
+//============
+
+app.get('/', (req, res) => {
+    res.render('index', {
+        title: config.siteName,
+        recently: posts.sort((a, b) => b.time - a.time).slice(0, 6),
+        data: posts,
+        config: config,
+        lang: lang,
+        page: 'home',
+    })
+
+});
+app.get('/page/:id', (req, res) => {
+
+    let page = Number(req.params.id)
+    if (getPage(1).pages < req.params.id || !Number.isInteger(page) || page < 1) {
+        res.redirect("/page/1")
+        return
+    }
+    res.render("page", {
+        title: config.siteName,
+        data: getPage(page).postExport,
+        totalPage: getPage(page).pages,
+        lang: lang,
+        nowPage: page
+    })
+});
+app.get('/post/:id', (req, res) => {
+    post = getFile(config.dataURL, req.params.id)
+    title = opencc.convertSync(req.params.id).replace(/\.[^.]+$/, '')
+    res.render('post', {
+        title: title,
+        postTitle: title,
+        postContent: opencc.convertSync(post),
+        lang: lang,
+        page: 'post'
+    })
+});
+
+
 
 //============
 // pageSwitch
 //============
 
-function getPage(num, thing = posts) {
-    var pages = Math.ceil(thing.length / config.postPerPage); //算出所需頁數
+function getPage(num, postData = posts) {
+    var pages = Math.ceil(postData.length / config.postPerPage); //算出所需頁數
     if (num > pages) { return } //確定真的收到數字及收到的數字是否大於總頁數
-    var firstPost = (num - 1) * config.postPerPage + 1 //輸出的第一個文章
-    let postExport = []
-    for (var i = 0; i < config.postPerPage; i++) {
-        post = i + firstPost - 1
-        if (thing[post] != undefined)
-            postExport.push(thing[post])
-    }
+    var firstPost = (num - 1) * config.postPerPage //輸出的第一個文章
+    let postExport = postData.slice(firstPost, firstPost + config.postPerPage)
     return { postExport, pages }
 }
 
@@ -209,10 +186,7 @@ function getPage(num, thing = posts) {
 //============
 
 app.get('/search/', (req, res) => {
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
+
     res.render('search', {
         title: lang.search.search + ' - ' + config.siteName,
         lang: lang,
@@ -243,29 +217,14 @@ function searchFiles(content) {
     return search
 
 }
-app.get('/search/:type/:id', (req, res) => {
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
+app.get('/search/:id', (req, res) => {
+
     var search = req.params.id
-    var type = req.params.type
-    if (type == 'list')
-        var renderFile = 'page_list',
-            page = 'search_list'
-    else
-        var renderFile = 'page',
-            page = 'search'
-    if (req.session.pass != config.password.password && config.password.status) {
-        res.redirect("/login/")
-        return
-    }
-    res.render(renderFile, {
+    res.render('page', {
         title: config.siteName,
         data: searchFiles(search.split(" ")),
-        page: page,
+        page: 'search',
         totalPage: 1,
-        allowRefresh: config.allowRefresh,
         lang: lang,
         nowPage: search
     })
@@ -277,8 +236,8 @@ app.get('/search/:type/:id', (req, res) => {
 //============
 app.use((req, res, next) => {
     res.status(404).render('error', {
-        title: lang.error.error + ' 404',
-        message: lang.error.error_404,
+        title: lang.error["404"].title,
+        message: lang.error["404"].message,
         lang: lang,
         page: 'error'
     })
@@ -286,8 +245,8 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).render('error', {
-        title: lang.error.error + ' 500',
-        message: lang.error.error_500,
+        title: lang.error["500"].title,
+        message: lang.error["500"].message,
         lang: lang,
         page: 'error'
     })
@@ -302,3 +261,4 @@ app.listen(config.sitePort, () => {
     console.log("working on http://localhost:" + config.sitePort + '\n')
     getDir()
 })
+fs.watch(config.dataURL, (eventType, filename) => { getDir() })

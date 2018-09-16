@@ -8,10 +8,10 @@ include _nav.pug
     .ts.stackable.three.cards
         if(data)
             each item in data
-                a.ts.card(href=item.link)
+                a.ts.card(href=item.link,data-title=item.title,data-summary=item.summary,data-time=item.time)
                     .content
                         .header=item.title
-                        .description!=item.summary
+                        .description=item.summary
                     if(item.icon)
                         .symbol
                             i(class=item.icon)
@@ -20,9 +20,9 @@ include _nav.pug
                 .content
                     .description=lang.error.nothingHere
     #pageSelections.ts.buttons
-        -for(i = 0; i < totalPage+4; i++)
+        -for(i = 0; i < totalPage + 4; i++)
             -let page = nowPage - 4 + i
-            -if(i<9 && page>0 && page<=totalPage)
+            -if(i < 9 && page > 0 && page <= totalPage)
                 -if(page == nowPage)
                     a.ts.active.button(href='./' +page)=page
                 -else

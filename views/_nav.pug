@@ -3,33 +3,10 @@
         a.item(href='/')
             i.icon.home
             =lang.nav.home
-        a.item(href='/page/card/1')
+        a.item(href='/page/1')
             i.icon.file.text
             =lang.nav.post
         a.item(href='/search/')
             i.icon.search
             =lang.nav.search
         .right.fitted.item
-            if(nowPage)
-                -if(page=='page'||page=='search')
-                    a.active.item
-                        i.icon.block.layout
-                        =lang.nav.card
-                -else
-                    a.item(href='../card/'+nowPage)
-                        i.icon.block.layout
-                        =lang.nav.card
-                        
-                -if(page=='page_list'||page=='search_list')
-                    a.active.item
-                        i.icon.list.layout
-                        =lang.nav.list
-                -else
-                    a.item(href='../list/'+nowPage)
-                        i.icon.list.layout
-                        =lang.nav.list
-            
-            -if(page=='page'&&allowRefresh)
-                a.item(href='/refresh/')
-                    i.icon.refresh
-                    =lang.nav.refresh

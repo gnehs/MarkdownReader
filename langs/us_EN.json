@@ -1,8 +1,13 @@
 {
     "error": {
-        "error": "Error",
-        "error_404": "File or Directory not found",
-        "error_500": "Internal Server Error",
+        "404": {
+            "title": "Error 404",
+            "message": "File or Directory not found"
+        },
+        "500": {
+            "title": "Error 500",
+            "message": "Internal Server Error"
+        },
         "nothingHere": "Nothing here"
     },
     "index": {
@@ -11,6 +16,8 @@
             "after": "!",
             "subHeader": "(･ิω･ิ)( ･ิϖ･ิ)(*>_<*)ﾉ"
         },
+        "websiteStatus": "Website status",
+        "recently": "Recently",
         "sitePort": "Site Port",
         "passwordStatus": "Password Status",
         "password": "Password",
@@ -18,6 +25,7 @@
         "allowRefresh": "Allow Refresh",
         "posts": "Posts",
         "postPerPage": "Post Per Page",
+        "more": "More",
         "lang": "Lang"
     },
     "nav": {

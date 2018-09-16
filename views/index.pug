@@ -1,5 +1,3 @@
--function isTrue(s,y,n){if(s){return y}else{return n}}
-
 mixin statistic(label,theClass,value)
 	.ts.card
 		.padded.center.aligned.content
@@ -9,18 +7,30 @@ mixin statistic(label,theClass,value)
 
 include _header.pug
 include _nav.pug
-.ts.narrow.container
+.ts.container
 	h1.ts.header
 		=lang.index.welcome.before+title+lang.index.welcome.after
 		.sub.header=lang.index.welcome.subHeader
+	
+	h2.ts.header=lang.index.recently
+	.ts.stackable.three.cards
+		each item in recently
+			a.ts.card(href=item.link,data-title=item.title,data-summary=item.summary,data-time=item.time)
+				.content
+					.header=item.title
+					.description=item.summary
+				if(item.icon)
+					.symbol
+						i(class=item.icon)
+	div(style='margin:20px 0;text-align:center')
+		a.ts.secondary.button(style='min-width:200px',href='/page/1')=lang.index.more
+	h2.ts.header=lang.index.websiteStatus
 	.ts.four.doubling.cards
-		+statistic(lang.index.sitePort,'',config.sitePort)
-		+statistic(lang.index.passwordStatus,isTrue(config.password.status,'positive','negative'),isTrue(config.password.status,lang.other.on,lang.other.off))
+		//-+statistic(lang.index.sitePort,'',config.sitePort)
+		+statistic(lang.index.passwordStatus,config.password.status?'positive':'negative',config.password.status?lang.other.on:lang.other.off)
 		+statistic(lang.index.password,'',config.password.password)
-		+statistic(lang.index.autoRefresh,'',config.autoRefresh+lang.clock.min)
-		+statistic(lang.index.allowRefresh,isTrue(config.allowRefresh.status,'positive','negative'),isTrue(config.allowRefresh,lang.other.yes,lang.other.no))
 		+statistic(lang.index.posts,'',data.length)
 		+statistic(lang.index.postPerPage,'',config.postPerPage)
-		+statistic(lang.index.lang,'',config.lang)
+		//-+statistic(lang.index.lang,'',config.lang)
 		
 include _footer.pug
