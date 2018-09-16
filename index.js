@@ -93,6 +93,12 @@ function getDirSummary(url) {
     };
 }
 //============
+//    lang
+//============
+app.get('/lang', (req, res) => {
+    res.json(lang)
+});
+//============
 //    Login
 //============
 app
@@ -138,7 +144,6 @@ app.get('/', (req, res) => {
         lang: lang,
         page: 'home',
     })
-
 });
 app.get('/page/:id', (req, res) => {
 

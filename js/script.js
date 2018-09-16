@@ -6,7 +6,15 @@ $(document).ready(function() {
     if (chapter.length == 0) {
         $('#menu').attr('style', 'display:none')
     }
+    $("input#search").on("keydown", function(event) {
+        if (event.which == 13)
+            searchPosts()
+    });
+    $.get("/lang", function(data) {
+        window.localStorage.lang = JSON.stringify(data)
+    });
 });
+
 
 function menuClick() {
     $('#menu a').click(function() {
@@ -91,11 +99,12 @@ function headerImg() {
 }
 
 function searchPosts(text) {
+    let lang = JSON.parse(window.localStorage.lang)
     if ($('input#search').val() == "")
         swal({
-            title: text,
+            title: lang.search.searchde,
             icon: "warning",
         });
     else
-        location.href = '/search/list/' + $('input#search').val();
+        location.href = '/search/' + $('input#search').val();
 }
