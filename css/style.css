@@ -11,6 +11,11 @@ kbd {
     font-family: 'Roboto Mono', monospace !important;
 }
 
+a.ts.card:hover:not(.no):not(.earlyspring) {
+    -webkit-box-shadow: 0px 7px 20px rgba(167, 167, 167, 0.6) !important;
+    box-shadow: 0px 7px 20px rgba(167, 167, 167, 0.6) !important;
+}
+
 
 /*===========
 Header

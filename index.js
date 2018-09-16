@@ -44,13 +44,15 @@ converter.setOption('openLinksInNewWindow', true);
 
 function getFileSummary(url, filename) {
     var data = fs.readFileSync(url + filename);
+    let time = fs.statSync(url + filename).mtime
     post = opencc.convertSync(converter.makeHtml(data.toString()));
     title = excerpt.text(opencc.convertSync(filename.replace(/\.[^.]+$/, '')), 18, '...')
     postSummary = excerpt.text(post, 128, '...').replace(new RegExp('<br />', "g"), '');
     return {
-        'title': title,
-        'summary': postSummary,
-        'link': '/post/' + filename,
+        title: title,
+        summary: postSummary,
+        link: '/post/' + filename,
+        time: time
     };
 }
 
@@ -150,7 +152,7 @@ app.get('/post/:id', (req, res) => {
     post = getFile(config.dataURL, req.params.id)
     title = opencc.convertSync(req.params.id).replace(/\.[^.]+$/, '')
     res.render('post', {
-        title: title + ' - ' + config.siteName,
+        title: title,
         postTitle: title,
         postContent: opencc.convertSync(post),
         lang: lang,
@@ -160,28 +162,29 @@ app.get('/post/:id', (req, res) => {
 //============
 //    Login
 //============
-app.get('/login/', (req, res) => {
-    if (config.password.status)
-        res.render('login', {
-            title: lang.login.header + ' - ' + config.siteName,
-            lang: lang,
-            page: 'login'
-        })
-    else
-        res.redirect("/")
-});
-app.post('/login/', (req, res) => {
-    req.session.pass = req.body['userPASS']
-    if (req.body['userPASS'] != config.password.password && config.password.status)
-        res.render('login', {
-            title: config.siteName,
-            page: 'login',
-            lang: lang,
-            message: lang.login.wrongPassword
-        })
-    else
-        res.redirect("/")
-});
+app
+    .get('/login/', (req, res) => {
+        if (config.password.status)
+            res.render('login', {
+                title: lang.login.header + ' - ' + config.siteName,
+                lang: lang,
+                page: 'login'
+            })
+        else
+            res.redirect("/")
+    })
+    .post('/login/', (req, res) => {
+        req.session.pass = req.body['userPASS']
+        if (req.body['userPASS'] != config.password.password && config.password.status)
+            res.render('login', {
+                title: config.siteName,
+                page: 'login',
+                lang: lang,
+                message: lang.login.wrongPassword
+            })
+        else
+            res.redirect("/")
+    });
 
 
 //============
