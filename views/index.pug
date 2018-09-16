@@ -27,7 +27,9 @@ include _nav.pug
 	h2.ts.header=lang.index.websiteStatus
 	.ts.four.doubling.cards
 		//-+statistic(lang.index.sitePort,'',config.sitePort)
-		+statistic(lang.index.passwordStatus,config.password.status?'positive':'negative',config.password.status?lang.other.on:lang.other.off)
+		+statistic(lang.index.passwordStatus,
+				   config.password.enabled ? 'positive' : 'negative',
+				   config.password.enabled ? lang.other.on : lang.other.off)
 		+statistic(lang.index.password,'',config.password.password)
 		+statistic(lang.index.posts,'',data.length)
 		+statistic(lang.index.postPerPage,'',config.postPerPage)
