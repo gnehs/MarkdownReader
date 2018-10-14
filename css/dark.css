@@ -1,0 +1,68 @@
+body.dark {
+    background: #000;
+}
+
+.dark header {
+    box-shadow: none !important;
+}
+
+.dark header .image {
+    background: #000;
+}
+
+.dark #headerImg {
+    opacity: 0.3;
+}
+
+.dark #menu {
+    filter: invert(0.89);
+}
+
+.dark #nav {
+    box-shadow: none;
+    background-color: #0000;
+}
+
+.dark .ts.button {
+    filter: invert(.9);
+}
+
+.dark .ts.divider {
+    border-bottom: 1px solid #323232 !important;
+}
+
+.dark .ts.header {
+    color: #fff;
+}
+
+.dark .ts.header .sub.header {
+    color: #e4e4e4;
+}
+
+.dark .ts.card {
+    background: #181717;
+    box-shadow: none !important;
+}
+
+.dark a.ts.card.card.card.card.card.card:hover {
+    background: #292626;
+    box-shadow: none !important;
+}
+
+.dark a.ts.card.card.card.card.card.card:active {
+    background: #0b0a0a;
+    box-shadow: none !important;
+}
+
+.dark .ts.card>.content>.header {
+    color: #fff;
+}
+
+.dark .ts.card>.content>.description {
+    color: #c8c8c8;
+}
+
+.dark p,
+.dark #content p {
+    color: rgb(239, 239, 239);
+}
