@@ -68,9 +68,9 @@ function getDir(url = config.dataURL) {
     for (i in files) {
         let file2read = files[i]
         let stat = fs.statSync(url + files[i])
-        if (stat.isDirectory())
-            posts.push(getDirSummary(file2read))
-        else if (stat.isFile())
+            //if (stat.isDirectory())
+            //posts.push(getDirSummary(file2read))
+        if (stat.isFile())
             posts.push(getFileSummary(url, file2read))
     }
     posts = posts.sort((a, b) => {
