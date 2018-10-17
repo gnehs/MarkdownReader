@@ -3,7 +3,7 @@
     "sitePort": 3014,
     "dataURL": "./data/",
     "password": {
-        "enabled": false,
+        "enabled": true,
         "password": "1069"
     },
     "postPerPage": 18,

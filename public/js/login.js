@@ -4,7 +4,8 @@ function check() {
     //判斷是否為空(全空格也算空)
     if (pass) {
         window.sessionStorage["pass"] = pass
-        return true;
+        $.post("/login/", { userPASS: pass }, data => data ? document.location.href = "/" : alert('pw err!'));
+        return false;
     }
     //非法輸入提示
     else {
