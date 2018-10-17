@@ -109,17 +109,17 @@ async function showSearchResult(keyword) {
     let lang = JSON.parse(window.localStorage.lang)
     let result=(await axios(`/mdr/search/${keyword}`)).data
     $("#app")
-    .html('')
-    .append(`<h1 class="ts header">${lang.search.nowSearch}${keyword}</h1>`)
-    .append(parsePosts(result))
+        .html('')
+        .append(`<h1 class="ts header">${lang.search.nowSearch}${keyword}</h1>`)
+        .append(parsePosts(result))
     
     router.updatePageLinks()
 }
 async function showPosts() {
     let result=(await axios('/mdr/posts')).data
     $("#app")
-    .html('')
-    .append(parsePosts(result))
+        .html('')
+        .append(parsePosts(result))
 
     router.updatePageLinks()
 }
