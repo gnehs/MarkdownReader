@@ -3,10 +3,11 @@ FROM node:10-alpine
 WORKDIR /app
 # Bundle app source
 COPY . /app
-# native dependencies extra tools
-RUN apk add --no-cache make gcc g++ python
-# node_modules
-RUN npm install --production
+
+RUN apk add --no-cache make gcc g++ python && \
+    npm install --production && \
+    npm cache clean --force && \
+    apk del make gcc g++ python
 
 ENV NODE_ENV=production
 EXPOSE 3014
