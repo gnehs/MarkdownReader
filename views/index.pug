@@ -1,38 +1,19 @@
-mixin statistic(label,theClass,value)
-	.ts.card
-		.padded.center.aligned.content
-			.ts.primary.statistic(class=theClass) 
-				.value=value
-				.label=label
-
 include _header.pug
-include _nav.pug
-.ts.container
-	h1.ts.header
-		=lang.index.welcome.before+title+lang.index.welcome.after
-		.sub.header=lang.index.welcome.subHeader
-	
-	h2.ts.header=lang.index.recently
-	.ts.stackable.three.cards
-		each item in recently
-			a.ts.card(href=item.link,data-title=item.title,data-summary=item.summary,data-time=item.time)
-				.content
-					.header=item.title
-					.description=item.summary
-				if(item.icon)
-					.symbol
-						i(class=item.icon)
-	div(style='margin:20px 0;text-align:center')
-		a.ts.secondary.button(style='min-width:200px',href='/page/1')=lang.index.more
-	h2.ts.header=lang.index.websiteStatus
-	.ts.four.doubling.cards
-		//-+statistic(lang.index.sitePort,'',config.sitePort)
-		+statistic(lang.index.passwordStatus,
-				   config.password.enabled ? 'positive' : 'negative',
-				   config.password.enabled ? lang.other.on : lang.other.off)
-		+statistic(lang.index.password,'',config.password.password)
-		+statistic(lang.index.posts,'',data.length)
-		+statistic(lang.index.postPerPage,'',config.postPerPage)
-		//-+statistic(lang.index.lang,'',config.lang)
+#nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
+    .ts.container
+        a.item.home(href="/",data-navigo)
+            i.icon.home
+        a.item.search(href="search",data-navigo)
+            i.icon.search
+        .right.fitted.item
+            a.item(data-dark)
+                i.icon.moon
+#app.ts.container
 		
 include _footer.pug
+#menu
+    a.button.previousChapter
+    a.button.nowChapter
+    a.button.nextChapter
+    a.button.top(data-scroll='0')
+        i.icon.caret.up

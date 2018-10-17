@@ -23,7 +23,7 @@ body.dark {
     background-color: #0000;
 }
 
-.dark .ts.button {
+.dark .ts.button:not(.inverted) {
     filter: invert(.9);
 }
 
@@ -65,4 +65,13 @@ body.dark {
 .dark p,
 .dark #content p {
     color: rgb(239, 239, 239);
+}
+
+.dark #login {
+    background: #363535;
+    color: #fff;
+}
+
+.dark #login .ts.button {
+    filter: none;
 }

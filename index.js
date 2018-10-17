@@ -21,9 +21,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
 }));
-app.use('/js', express.static('js'));
-app.use('/css', express.static('css'));
-app.use('/icon', express.static('icon'));
+app.use('/', express.static('public'));
 
 
 // Markdown viewer
@@ -47,7 +45,7 @@ function getFileSummary(url, filename) {
     return {
         title: title,
         summary: postSummary,
-        link: '/post/' + filename,
+        link: filename,
         time: time
     };
 }
@@ -66,8 +64,6 @@ function getDir(url = config.dataURL) {
     for (i in files) {
         let file2read = files[i]
         let stat = fs.statSync(url + files[i])
-            //if (stat.isDirectory())
-            //posts.push(getDirSummary(file2read))
         if (stat.isFile())
             posts.push(getFileSummary(url, file2read))
     }
@@ -93,15 +89,13 @@ function getDirSummary(url) {
 //============
 //    lang
 //============
-app.get('/lang', (req, res) => {
-    res.json(lang)
-});
+app.get('/lang', (req, res) => res.json(lang));
 //============
 //    Login
 //============
 app
     .get('/login/', (req, res) => {
-        if (config.password.enabled)
+        if (config.password.enabled && req.body.userPASS != config.password.password)
             res.render('login', {
                 title: lang.login.header + ' - ' + config.siteName,
                 lang: lang,
@@ -111,23 +105,15 @@ app
             res.redirect("/")
     })
     .post('/login/', (req, res) => {
-        req.session.pass = req.body['userPASS']
-        if (req.body['userPASS'] != config.password.password && config.password.enabled)
-            res.render('login', {
-                title: config.siteName,
-                page: 'login',
-                lang: lang,
-                message: lang.login.wrongPassword
-            })
-        else
-            res.redirect("/")
+        req.session.pass = req.body.userPASS
+        res.send(config.password.enabled && req.body.userPASS == config.password.password)
     });
 
 app.use((req, res, next) => {
-    if (req.session.pass != config.password.password && config.password.enabled)
-        res.redirect("/login/")
-    else
+    if (!config.password.enabled || config.password.enabled && req.session.pass == config.password.password)
         next()
+    else
+        res.redirect("/login/")
 });
 //============
 //    Main
@@ -143,31 +129,13 @@ app.get('/', (req, res) => {
         page: 'home',
     })
 });
-app.get('/page/:id', (req, res) => {
-    let page = Number(req.params.id)
-    if (getPage(1).pages < req.params.id || !Number.isInteger(page) || page < 1) {
-        res.redirect("/page/1")
-        return
-    }
-    res.render("page", {
-        title: config.siteName,
-        data: getPage(page).postExport,
-        totalPage: getPage(page).pages,
-        lang: lang,
-        nowPage: page
-    })
-});
-app.get('/post/:id', (req, res) => {
-    post = getFile(config.dataURL, req.params.id)
-    title = req.params.id.replace(/\.[^.]+$/, '')
-    res.render('post', {
-        title: title,
-        postTitle: title,
-        postContent: post,
-        lang: lang,
-        page: 'post'
-    })
-});
+
+app.get('/mdr/posts', (req, res) => res.json(posts));
+
+app.get('/mdr/post/:id', (req, res) => res.json({
+    title: req.params.id.replace(/\.[^.]+$/, ''),
+    content: getFile(config.dataURL, req.params.id)
+}));
 
 
 
@@ -186,17 +154,8 @@ function getPage(num, postData = posts) {
 //============
 //   Search
 //============
-
-app.get('/search/', (req, res) => {
-    res.render('search', {
-        title: lang.search.search + ' - ' + config.siteName,
-        lang: lang,
-        page: 'search'
-    })
-});
-
 function searchFiles(content) {
-    search = []
+    result = []
     var files = fs.readdirSync(config.dataURL);
     for (i in files) {
         var keywordCount = 0
@@ -207,57 +166,32 @@ function searchFiles(content) {
             if (fileContent.indexOf(content[i]) != -1) keywordCount += 1
 
             if (keywordCount == content.length) {
-                search.push(getFileSummary(config.dataURL, file2read))
+                result.push(getFileSummary(config.dataURL, file2read))
             }
         }
     }
-    search = search.sort((a, b) => {
-        return a.title.localeCompare(b.title, "zh-TW");
-    });
-    return search
+    return result.sort((a, b) => a.title.localeCompare(b.title, "zh-TW"));
 }
-app.get('/search/:id', (req, res) => {
-
-    var search = req.params.id
-    res.render('page', {
-        title: config.siteName,
-        data: searchFiles(search.split(" ")),
-        page: 'search',
-        totalPage: 1,
-        lang: lang,
-        nowPage: search
-    })
-
-});
+app.get('/mdr/search/:keyword', (req, res) => res.json(searchFiles(req.params.keyword.split(" "))));
 
 //============
 //   Error
 //============
 app.use((req, res, next) => {
-    res.status(404).render('error', {
-        title: lang.error["404"].title,
-        message: lang.error["404"].message,
-        lang: lang,
-        page: 'error'
-    })
+    res.redirect("/")
 });
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).render('error', {
-        title: lang.error["500"].title,
-        message: lang.error["500"].message,
-        lang: lang,
-        page: 'error'
-    })
+    res.status(500).send('500')
 }); // error
 
 //============
 //   Start
 //============
 app.listen(config.sitePort, () => {
-    console.log('\n' + config.siteName)
+    console.log(`MarkdownReader`)
     console.log(Date())
-    console.log("working on http://localhost:" + config.sitePort + '\n')
+    console.log(`http://localhost:${config.sitePort}`)
     getDir()
 })
 fs.watch(config.dataURL, (eventType, filename) => { getDir() })
