@@ -31,6 +31,7 @@ router
     .hooks({
         before: (done, params) => {
             $('#menu').removeClass('show')
+            $('#app').html(`<div class="ts active centered inline loader"></div>`)
             done()
         },
         after: params => {
@@ -40,26 +41,20 @@ router
 
 
 function headerImg() {
-    if (window.sessionStorage["headerImg"]) {
-        var headerImg = window.sessionStorage["headerImg"]
-    } else {
-        var perviewImg = Trianglify({
-            width: 2560,
-            height: 2560,
-            stroke_width: 200,
-            cell_size: 100,
-        });
-        var headerImg = perviewImg.png()
-        window.sessionStorage["headerImg"] = headerImg
-    }
-    $('#headerImg').attr('src', headerImg)
-        //document.write('<img src="' + headerImg + '">');
+    var perviewImg = Trianglify({
+        width: 2560,
+        height: 2560,
+        stroke_width: 200,
+        cell_size: 100,
+    });
+    $('#headerImg').attr('src', perviewImg.png())
 }
 
 function searchPosts(text) {
     let lang = JSON.parse(window.localStorage.lang)
+    console.log(lang)
     if ($('input#search').val() == "")
-        alert('未輸入關鍵字')
+        alert(lang.search.placeholder)
     else
         router.navigate(`search/${encodeURIComponent($('input#search').val())}`);
 }
@@ -96,12 +91,13 @@ async function showPost(filename) {
     }
 }
 function showSearch() {
+    let lang = JSON.parse(window.localStorage.lang)
     $("#app")
         .html('')
         .append(`<div class="ts very narrow container">
             <div class="ts action fluid input" style="margin:70px 20px;">
-                <input id="search" placeholder="輸入關鍵字來搜尋" type="text">
-                <button class="ts button" onclick="searchPosts()">搜尋</button>
+                <input id="search" placeholder="${lang.search.placeholder}" type="text">
+                <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
             </div>
         </div>`)
     $("input#search").on("keydown", function(event) {
@@ -110,11 +106,14 @@ function showSearch() {
     });
 }
 async function showSearchResult(keyword) {
+    let lang = JSON.parse(window.localStorage.lang)
     let result=(await axios(`/mdr/search/${keyword}`)).data
     $("#app")
     .html('')
-    .append(`<h1 class="ts header">SearchResult ${keyword}</h1>`)
+    .append(`<h1 class="ts header">${lang.search.nowSearch}${keyword}</h1>`)
     .append(parsePosts(result))
+    
+    router.updatePageLinks()
 }
 async function showPosts() {
     let result=(await axios('/mdr/posts')).data

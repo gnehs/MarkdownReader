@@ -1,19 +1,20 @@
 include _header.pug
 #nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
-    .ts.container
-        a.item.home(href="/",data-navigo)
-            i.icon.home
-        a.item.search(href="search",data-navigo)
-            i.icon.search
-        .right.fitted.item
-            a.item(data-dark)
-                i.icon.moon
+	.ts.container
+		a.item.home(href="/",data-navigo)
+			i.icon.home
+		a.item.search(href="search",data-navigo)
+			i.icon.search
+		.right.fitted.item
+			a.item(data-dark)
+				i.icon.moon
 #app.ts.container
+	.ts.active.centered.inline.loader
 		
 include _footer.pug
 #menu
-    a.button.previousChapter
-    a.button.nowChapter
-    a.button.nextChapter
-    a.button.top(data-scroll='0')
-        i.icon.caret.up
+	a.button.previousChapter
+	a.button.nowChapter
+	a.button.nextChapter
+	a.button.top(data-scroll='0')
+		i.icon.caret.up

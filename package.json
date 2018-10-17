@@ -12,7 +12,7 @@
     },
     "devDependencies": {},
     "scripts": {
-        "dev": "nodemon index.js",
+        "dev": "nodemon index.js --ignore public/",
         "start": "node index.js"
     },
     "repository": {
