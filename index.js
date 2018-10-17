@@ -25,8 +25,6 @@ app.use('/js', express.static('js'));
 app.use('/css', express.static('css'));
 app.use('/icon', express.static('icon'));
 
-//簡轉繁
-const opencc = new(require('opencc'))('s2twp.json');
 
 // Markdown viewer
 const converter = new(require('showdown')).Converter()
@@ -43,8 +41,8 @@ converter.setOption('openLinksInNewWindow', true);
 function getFileSummary(url, filename) {
     var data = fs.readFileSync(url + filename);
     let time = fs.statSync(url + filename).mtime
-    post = opencc.convertSync(converter.makeHtml(data.toString()));
-    title = excerpt.text(opencc.convertSync(filename.replace(/\.[^.]+$/, '')), 18, '...')
+    post = converter.makeHtml(data.toString())
+    title = excerpt.text(filename.replace(/\.[^.]+$/, ''), 18, '...')
     postSummary = excerpt.text(post, 128, '...').replace(new RegExp('<br />', "g"), '');
     return {
         title: title,
@@ -55,7 +53,7 @@ function getFileSummary(url, filename) {
 }
 
 function getFile(url, filename) {
-    return opencc.convertSync(converter.makeHtml(fs.readFileSync(url + filename).toString()));
+    return converter.makeHtml(fs.readFileSync(url + filename).toString())
 }
 
 
@@ -146,7 +144,6 @@ app.get('/', (req, res) => {
     })
 });
 app.get('/page/:id', (req, res) => {
-
     let page = Number(req.params.id)
     if (getPage(1).pages < req.params.id || !Number.isInteger(page) || page < 1) {
         res.redirect("/page/1")
@@ -162,11 +159,11 @@ app.get('/page/:id', (req, res) => {
 });
 app.get('/post/:id', (req, res) => {
     post = getFile(config.dataURL, req.params.id)
-    title = opencc.convertSync(req.params.id).replace(/\.[^.]+$/, '')
+    title = req.params.id.replace(/\.[^.]+$/, '')
     res.render('post', {
         title: title,
         postTitle: title,
-        postContent: opencc.convertSync(post),
+        postContent: post,
         lang: lang,
         page: 'post'
     })
@@ -191,7 +188,6 @@ function getPage(num, postData = posts) {
 //============
 
 app.get('/search/', (req, res) => {
-
     res.render('search', {
         title: lang.search.search + ' - ' + config.siteName,
         lang: lang,
@@ -219,7 +215,6 @@ function searchFiles(content) {
         return a.title.localeCompare(b.title, "zh-TW");
     });
     return search
-
 }
 app.get('/search/:id', (req, res) => {
 
