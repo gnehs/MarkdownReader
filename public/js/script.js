@@ -34,7 +34,7 @@ router
         'search': showSearch,
         'post/:filename': params => showPost(params.filename),
         'posts/:page': params => showPosts(Number(params.page) - 1),
-        '*': showPosts(0)
+        '*': () => showPosts(0)
     })
     .resolve()
 router
