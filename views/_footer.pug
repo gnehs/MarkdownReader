@@ -1,6 +1,10 @@
-footer.ts.container
-    .ts.section.divider
-    p gnehs.net 2018 (・∀・) 
+.ts.container
+	.ts.divider
+footer.ts.container(style="display: flex;")
+	div(style="line-height: 34px;") gnehs.net 2018 (・∀・) 
+	div(style="flex: 1;text-align:right")
+		.ts.circular.compact.basic.icon.button(data-dark)
+			i.icon.moon
 
 script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
 script(src="//cdnjs.cloudflare.com/ajax/libs/trianglify/1.2.0/trianglify.min.js")

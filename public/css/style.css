@@ -32,16 +32,30 @@ header .header {
 
 
 /*==========
+pagination
+==========*/
+
+.pagination {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.pagination>.button {
+    margin: 3px 2px;
+}
+
+
+/*==========
 NAV
 ==========*/
 
 #nav {
-    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.14);
     margin-bottom: 35px;
     margin-top: -48px;
-    background-color: rgba(0, 0, 0, 0.22);
+    background: transparent;
     overflow: scroll;
     width: 100vw;
+    box-shadow: none;
 }
 
 #nav a.item {

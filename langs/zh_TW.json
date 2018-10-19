@@ -8,7 +8,7 @@
             "title": "錯誤：500",
             "message": "伺服器爆炸ㄌ"
         },
-        "nothingHere": "這裡沒啥東西"
+        "nothingHere": "這裡沒有任何東西"
     },
     "index": {
         "welcome": {
@@ -34,6 +34,7 @@
         "card": "卡片",
         "list": "列表",
         "search": "搜尋",
+        "nightMode": "夜間模式",
         "refresh": "重整"
     },
     "login": {

@@ -3,11 +3,14 @@ include _header.pug
 	.ts.container
 		a.item.home(href="/",data-navigo)
 			i.icon.home
+			span Home
 		a.item.search(href="search",data-navigo)
 			i.icon.search
+			span Search
 		.right.fitted.item
-			a.item(data-dark)
+			a.item.dark(data-dark)
 				i.icon.moon
+				span Night Mode
 #app.ts.container
 	.ts.active.centered.inline.loader
 		

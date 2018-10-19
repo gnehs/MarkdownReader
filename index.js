@@ -110,9 +110,10 @@ app
     });
 
 app.use((req, res, next) => {
-    if (!config.password.enabled || config.password.enabled && req.session.pass == config.password.password)
+    if (!config.password.enabled || config.password.enabled && req.session.pass == config.password.password) {
+        res.header("Cache-Control", "max-age=7200") //快取 2hr
         next()
-    else
+    } else
         res.redirect("/login/")
 });
 //============

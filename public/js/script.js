@@ -14,17 +14,27 @@ $(document).ready(function() {
     });
     $.get("/lang", function(data) {
         window.localStorage.lang = JSON.stringify(data)
+        upadteLang()
     });
     router.updatePageLinks()
 });
 
+function upadteLang() {
+    let lang = JSON.parse(window.localStorage.lang)
+    if (lang) {
+        $("#nav .home span").text(lang.nav.home)
+        $("#nav .search span").text(lang.nav.search)
+        $("#nav .dark span").text(lang.nav.nightMode)
+    }
+}
 const router = new Navigo(null, true, '#/');
 router
     .on({
         'search/:keyword': params => showSearchResult(params.keyword),
         'search': showSearch,
         'post/:filename': params => showPost(params.filename),
-        '*': showPosts
+        'posts/:page': params => showPosts(Number(params.page) - 1),
+        '*': showPosts(0)
     })
     .resolve()
 router
@@ -32,6 +42,7 @@ router
         before: (done, params) => {
             $('#menu').removeClass('show')
             $('#app').html(`<div class="ts active centered inline loader"></div>`)
+            $(document).attr("title", `MarkdownReader`);
             done()
         },
         after: params => {
@@ -52,11 +63,48 @@ function headerImg() {
 
 function searchPosts(text) {
     let lang = JSON.parse(window.localStorage.lang)
-    console.log(lang)
     if ($('input#search').val() == "")
         alert(lang.search.placeholder)
     else
         router.navigate(`search/${encodeURIComponent($('input#search').val())}`);
+}
+
+function showSearch() {
+    let lang = JSON.parse(window.localStorage.lang)
+
+    $("#app")
+        .html('')
+        .append(`<div class="ts very narrow container">
+            <div class="ts action fluid input" style="margin:20px 20px;">
+                <input id="search" placeholder="${lang.search.placeholder}" type="text">
+                <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
+            </div>
+        </div>`)
+    $("input#search").on("keydown", function(event) {
+        if (event.which == 13)
+            searchPosts()
+    });
+}
+
+async function showSearchResult(keyword) {
+    let lang = JSON.parse(window.localStorage.lang)
+    let result = (await axios(`/mdr/search/${keyword}`)).data
+    console.log(result)
+    $("#app")
+        .html('')
+        .append(`<div class="ts very narrow container">
+            <div class="ts action fluid input" style="margin:20px 20px;">
+                <input id="search" placeholder="${lang.search.placeholder}" value="${keyword}" type="text">
+                <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
+            </div>
+        </div>`)
+        .append(result.length > 0 ? parsePosts(result) : `<h5 class="ts center aligned header">${lang.error.nothingHere}</h5>`)
+
+    $("input#search").on("keydown", function(event) {
+        if (event.which == 13)
+            searchPosts()
+    });
+    router.updatePageLinks()
 }
 
 function parsePosts(posts) {
@@ -77,9 +125,12 @@ function parsePosts(posts) {
 }
 async function showPost(filename) {
     let result=(await axios(`/mdr/post/${filename}`)).data
+
     $("#app")
-    .html('')
-    .append(`<h3 class="ts header">${result.title}</h3><div id="content">${result.content}</div>`)
+        .html('')
+        .append(`<h3 class="ts header">${result.title}</h3><div id="content">${result.content}</div>`)
+
+    $(document).attr("title",result.title);
     let chapter = $('#content h1,#content h2,#content h3,#content h4,#content h5,#content h6')
     chapter.attr("class", "ts header")
     if (chapter.length == 0) {
@@ -90,36 +141,20 @@ async function showPost(filename) {
         scrollspy()
     }
 }
-function showSearch() {
-    let lang = JSON.parse(window.localStorage.lang)
-    $("#app")
-        .html('')
-        .append(`<div class="ts very narrow container">
-            <div class="ts action fluid input" style="margin:70px 20px;">
-                <input id="search" placeholder="${lang.search.placeholder}" type="text">
-                <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
-            </div>
-        </div>`)
-    $("input#search").on("keydown", function(event) {
-        if (event.which == 13)
-            searchPosts()
-    });
-}
-async function showSearchResult(keyword) {
-    let lang = JSON.parse(window.localStorage.lang)
-    let result=(await axios(`/mdr/search/${keyword}`)).data
-    $("#app")
-        .html('')
-        .append(`<h1 class="ts header">${lang.search.nowSearch}${keyword}</h1>`)
-        .append(parsePosts(result))
-    
-    router.updatePageLinks()
-}
-async function showPosts() {
+async function showPosts(page=0) {
     let result=(await axios('/mdr/posts')).data
+    console.log(result)
+    let pagination = `<div class="pagination">`
+    for (i=0; i < Math.floor(result.length / 24 + 1); i++) {
+        pagination+=`<a class="ts circular button ${i==page?`active`:``}" 
+                        href="posts/${i+1}" 
+                        data-navigo>${i+1}</a>`
+    }
+    pagination+=`</div>`
     $("#app")
         .html('')
-        .append(parsePosts(result))
+        .append(parsePosts(result.splice(page*24, 24)))
+        .append(pagination)
 
     router.updatePageLinks()
 }
