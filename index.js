@@ -64,7 +64,7 @@ function getDir(url = config.dataURL) {
     for (i in files) {
         let file2read = files[i]
         let stat = fs.statSync(url + files[i])
-        if (stat.isFile())
+        if (stat.isFile() && !file2read.match(/^\.\_/))
             posts.push(getFileSummary(url, file2read))
     }
     posts = posts.sort((a, b) => {
