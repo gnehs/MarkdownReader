@@ -12,7 +12,7 @@ html
     body
         #data(style="display:none")
             .siteTitle=title
-        header.ts.heading.vertically.padded.fluid.slate
+        header.ts.heading.vertically.padded.fluid.slate(class=page=="login"?"login":"home")
             .image
                 img#headerImg
             a.ts.container(href='/',data-navigo)
@@ -23,8 +23,11 @@ html
         footer.ts.container(style="display: flex;")
             div(style="line-height: 34px;") gnehs.net 2018 (・∀・) 
             div(style="flex: 1;text-align:right")
-                .ts.circular.compact.basic.icon.button(data-dark)
-                    i.icon.moon
+                .ts.separated.circular.compact.basic.icon.buttons
+                    a.ts.button(href="https://github.com/gnehs/MarkdownReader",target="_blank")
+                        i.icon.github
+                    a.ts.button(data-dark)
+                        i.icon.moon
         block footer
         script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
         script(src="//cdnjs.cloudflare.com/ajax/libs/trianglify/1.2.0/trianglify.min.js")

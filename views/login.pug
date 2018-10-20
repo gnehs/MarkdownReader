@@ -1,27 +1,17 @@
-doctype html
-html
-	head
-		title!= title
-		meta(charset='utf-8')
-		meta(name='viewport', content='width=device-width, initial-scale=1.0')
-		link(href='//cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css',rel='stylesheet')
-		link(href='//cdn.rawgit.com/gnehs/Tocas-UI-Xiaoan/master/css/UIKit.css',rel='stylesheet')
-		link(href='/css/style.css',rel='stylesheet')
-		link(href='/css/dark.css',rel='stylesheet')
-		link(href='/icon/icon.png',rel='shortcut icon')
-	body
-		.ts.container(style="margin-top:150px")
-			if(message)
-				h1.ts.center.aligned.negative.header=lang.login.errorHeader
-					.sub.header=message
-			else
-				h1.ts.center.aligned.header=lang.login.header
-					.sub.header=lang.login.subHeader
-			#login.ts.centered.secondary.segment
-				form.ts.form(method='post',role='form',onsubmit='return check()',action='/login/')
-					.field
-						labelr=lang.login.password
-						input(type='password', placeholder='', id='userPASS', name='userPASS',required)
-					button.ts.positive.fluid.button(type='submit')=lang.login.loginButton
-		include _footer.pug
-		script(src='/js/login.js')
+extends _layout.pug
+block content
+	.ts.container(style="margin-top:30px")
+		if(message)
+			h1.ts.center.aligned.negative.header=lang.login.errorHeader
+				.sub.header=message
+		else
+			h1.ts.center.aligned.header=lang.login.header
+				.sub.header=lang.login.subHeader
+		#login.ts.centered.secondary.segment
+			form.ts.form(method='post',role='form',onsubmit='return check()',action='/login/')
+				.field
+					labelr=lang.login.password
+					input(type='password', placeholder='', id='userPASS', name='userPASS',required)
+				button.ts.positive.fluid.button(type='submit')=lang.login.loginButton
+block footer
+	script(src='/js/login.js')

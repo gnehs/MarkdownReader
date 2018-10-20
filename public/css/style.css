@@ -21,7 +21,7 @@ a.ts.card:hover:not(.no):not(.earlyspring) {
 Header
 ===========*/
 
-header {
+header.home {
     padding: 5em 2em !important;
     padding-bottom: calc(4em + 48px) !important;
 }
