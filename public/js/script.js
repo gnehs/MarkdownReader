@@ -174,11 +174,11 @@ async function showPosts(page=0) {
     pagination+=`</div>`
     $("#app")
         .html('')
-        .append(`<div class="ts grid" style="margin-bottom:15px;">
-            <div class="eight wide column">
-                <h2 class="ts header">${lang.page.nowPage.before}${page+1}${lang.page.nowPage.middle}${totalPage}${lang.page.nowPage.after}</h2>
+        .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
+            <div class="stretched column">
+                <h2 class="ts header pagetitle">${lang.page.nowPage.before}${page+1}${lang.page.nowPage.middle}${totalPage}${lang.page.nowPage.after}</h2>
             </div>
-            <div class="eight wide column" style="text-align:right;">
+            <div class="column" style="text-align:right;">
                 <div class="ts icon buttons">
                     <button class="ts button" data-sort="A-Z">
                         <i class="sort alphabet descending icon"></i>

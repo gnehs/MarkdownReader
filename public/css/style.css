@@ -92,6 +92,12 @@ posts
     overflow: hidden;
 }
 
+@media screen and (max-width: 767px) {
+    .ts.grid.pageinfo {
+        flex-direction: column-reverse;
+    }
+}
+
 
 /*==========
 pageSelections
