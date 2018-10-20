@@ -24,7 +24,7 @@
     "sitePort": 3014,            //網站 port
     "dataURL": "./data/",        //資料位置
     "password": {                //密碼登入
-        "status": true,          //開啟或關閉[true|false]
+        "enabled": true,         //開啟或關閉[true|false]
         "password": "1069"       //密碼
     },
     "sessionSecret": "1069",     //session secret
@@ -45,7 +45,7 @@
     "sitePort": 3014,            //site port
     "dataURL": "./data/",        //data location
     "password": {                //password login
-        "status": true,          //turn on or turn off[true|false]
+        "enabled": true,         //turn on or turn off[true|false]
         "password": "1069"       //password
     },
     "sessionSecret": "Spring",   //session secret
