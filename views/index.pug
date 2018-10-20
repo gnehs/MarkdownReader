@@ -1,23 +1,23 @@
-include _header.pug
-#nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
-	.ts.container
-		a.item.home(href="/",data-navigo)
-			i.icon.home
-			span Home
-		a.item.search(href="search",data-navigo)
-			i.icon.search
-			span Search
-		.right.fitted.item
-			a.item.dark(data-dark)
-				i.icon.moon
-				span Night Mode
-#app.ts.container
-	.ts.active.centered.inline.loader
-		
-include _footer.pug
-#menu
-	a.button.previousChapter
-	a.button.nowChapter
-	a.button.nextChapter
-	a.button.top(data-scroll='0')
-		i.icon.caret.up
+extends _layout.pug
+block content
+	#nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
+		.ts.container
+			a.item.home(href="/",data-navigo)
+				i.icon.home
+				span Home
+			a.item.search(href="search",data-navigo)
+				i.icon.search
+				span Search
+			.right.fitted.item
+				a.item.dark(data-dark)
+					i.icon.moon
+					span Night Mode
+	#app.ts.container
+		.ts.active.centered.inline.loader
+block footer
+	#menu
+		a.button.previousChapter
+		a.button.nowChapter
+		a.button.nextChapter
+		a.button.top(data-scroll='0')
+			i.icon.caret.up

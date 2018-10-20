@@ -1,0 +1,34 @@
+doctype html
+html
+    head
+        title!= title
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(href='https://cdn.jsdelivr.net/gh/TeaMeow/TocasUI@3.0.0-alpha.1/dist/tocas.css',rel='stylesheet')
+        link(href='https://xiaoan.tocas-ui.com/css/UIKit.css',rel='stylesheet')
+        link(href='/css/style.css',rel='stylesheet')
+        link(href='/css/dark.css',rel='stylesheet')
+        link(href='/icon/icon.png',rel='shortcut icon')
+    body
+        #data(style="display:none")
+            .siteTitle=title
+        header.ts.heading.vertically.padded.fluid.slate
+            .image
+                img#headerImg
+            a.ts.container(href='/',data-navigo)
+                h1.ts.center.aligned.header!= title
+        block content
+        .ts.container
+            .ts.divider
+        footer.ts.container(style="display: flex;")
+            div(style="line-height: 34px;") gnehs.net 2018 (・∀・) 
+            div(style="flex: 1;text-align:right")
+                .ts.circular.compact.basic.icon.button(data-dark)
+                    i.icon.moon
+        block footer
+        script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src="//cdnjs.cloudflare.com/ajax/libs/trianglify/1.2.0/trianglify.min.js")
+        script(src='//cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js')
+        script(src='//unpkg.com/sweetalert/dist/sweetalert.min.js')
+        script(src='/js/navigo.min.js')
+        script(src='/js/script.js')
