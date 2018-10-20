@@ -1,3 +1,11 @@
+$(document).ready(function() {
+    $("#userPASS").keypress(function(event) {
+        if (event.keyCode == 13) {
+            check()
+        }
+    });
+});
+
 function check() {
     let pass = document.getElementById("userPASS").value.trim()
 
