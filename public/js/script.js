@@ -110,7 +110,7 @@ async function showSearchResult(keyword) {
 }
 
 function parsePosts(posts) {
-    let r = $(`<div class="ts stackable three cards" />`)
+    let r = $(`<div class="ts stackable three cards posts" />`)
     for (let i in posts) {
         let item = posts[i]
         r.append(`<a class="ts card" href="post/${encodeURIComponent(item.link)}" data-navigo>

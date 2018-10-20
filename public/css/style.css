@@ -84,6 +84,16 @@ NAV
 
 
 /*==========
+posts
+==========*/
+
+.posts .card .description {
+    max-height: 11em;
+    overflow: hidden;
+}
+
+
+/*==========
 pageSelections
 ==========*/
 
