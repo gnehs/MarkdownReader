@@ -41,7 +41,8 @@ function getFileSummary(url, filename) {
     let time = fs.statSync(url + filename).mtime
     post = converter.makeHtml(data.toString())
     title = excerpt.text(filename.replace(/\.[^.]+$/, ''), 18, '...')
-    postSummary = excerpt.text(post, 128, '...').replace(new RegExp('<br />', "g"), '');
+    postSummary = excerpt.text(post, 128, '...').replace(/<br \/>/g, ' / ');
+    console.log(excerpt.text(post, 128, '...'))
     return {
         title: title,
         summary: postSummary,

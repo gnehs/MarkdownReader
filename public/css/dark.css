@@ -31,8 +31,11 @@ body.dark {
     border-bottom: 1px solid #323232 !important;
 }
 
-.dark .ts.header {
-    color: #fff;
+.dark .ts.header,
+.dark label,
+.dark .ts.card>.content>.header,
+.dark #login {
+    color: #fff !important;
 }
 
 .dark .ts.header .sub.header {
@@ -54,10 +57,6 @@ body.dark {
     box-shadow: none !important;
 }
 
-.dark .ts.card>.content>.header {
-    color: #fff;
-}
-
 .dark .ts.card>.content>.description {
     color: #c8c8c8;
 }
@@ -69,7 +68,6 @@ body.dark {
 
 .dark #login {
     background: #363535;
-    color: #fff;
 }
 
 .dark #login .ts.button {
