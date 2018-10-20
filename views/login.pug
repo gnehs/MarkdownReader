@@ -8,10 +8,10 @@ block content
 			h1.ts.center.aligned.header=lang.login.header
 				.sub.header=lang.login.subHeader
 		#login.ts.centered.secondary.segment
-			form.ts.form(method='post',role='form',onsubmit='return check()',action='/login/')
+			.ts.form
 				.field
-					labelr=lang.login.password
+					label=lang.login.password
 					input(type='password', placeholder='', id='userPASS', name='userPASS',required)
-				button.ts.positive.fluid.button(type='submit')=lang.login.loginButton
+				button.ts.positive.fluid.button(onclick='check()')=lang.login.loginButton
 block footer
 	script(src='/js/login.js')

@@ -64,7 +64,10 @@ function headerImg() {
 function searchPosts(text) {
     let lang = JSON.parse(window.localStorage.lang)
     if ($('input#search').val() == "")
-        alert(lang.search.placeholder)
+        swal({
+            title: lang.search.placeholder,
+            icon: "error",
+        })
     else
         router.navigate(`search/${encodeURIComponent($('input#search').val())}`);
 }

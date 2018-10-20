@@ -43,6 +43,7 @@
         "errorHeader": "哎呀！",
         "password": "密碼",
         "wrongPassword": "看來你輸入了錯誤的密碼",
+        "enterPassword": "請輸入密碼",
         "loginButton": "登入"
     },
     "page": {

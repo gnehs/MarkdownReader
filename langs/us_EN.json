@@ -43,6 +43,7 @@
         "errorHeader": "Hey!",
         "password": "Password",
         "wrongPassword": "You've entered the wrong password",
+        "enterPassword": "Please enter the password",
         "loginButton": "Login"
     },
     "page": {
