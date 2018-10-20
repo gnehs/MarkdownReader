@@ -123,8 +123,6 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.render('index', {
         title: config.siteName,
-        recently: posts.sort((a, b) => b.time - a.time).slice(0, 6),
-        data: posts,
         config: config,
         lang: lang,
         page: 'home',
