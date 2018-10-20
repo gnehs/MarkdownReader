@@ -8,13 +8,9 @@
 
 ## 功能
 
--   密碼登入
--   自動重整
--   繁體化文章
--   自訂網站名稱
--   自訂網站 Port
--   自訂載入資料位置
--   自訂一頁顯示多少文章
+-   密碼保護
+-   按照名稱或文章名稱排序
+-   夜間模式
 -   搜尋
 
 ## 開始使用
@@ -27,14 +23,12 @@
     "siteName": "髒髒站",         //網站名稱
     "sitePort": 3014,            //網站 port
     "dataURL": "./data/",        //資料位置
-    "allowRefresh": true,        //是否開啟手動重整功能[true|false]
-    "autoRefresh": 60,           //自動重整間隔（分鐘）
     "password": {                //密碼登入
         "status": true,          //開啟或關閉[true|false]
         "password": "1069"       //密碼
     },
-    "postPerPage": 9,            //一頁顯示多少文章
-    "sessionSecret": "1069" //session secret
+    "sessionSecret": "1069",     //session secret
+    "lang": "zh_TW"              //語言
 }
 ```
 
@@ -50,14 +44,12 @@
     "siteName": "early spring",  //site name
     "sitePort": 3014,            //site port
     "dataURL": "./data/",        //data location
-    "allowRefresh": true,        //allow manual refresh[true|false]
-    "autoRefresh": 60,           //auto refresh（minute）
     "password": {                //password login
         "status": true,          //turn on or turn off[true|false]
         "password": "1069"       //password
     },
-    "postPerPage": 9,            //posts per page
-    "sessionSecret": "Spring"    //session secret
+    "sessionSecret": "Spring",   //session secret
+    "lang": "us_EN"              //lang
 }
 ```
 

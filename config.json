@@ -6,7 +6,6 @@
         "enabled": true,
         "password": "1069"
     },
-    "postPerPage": 18,
     "sessionSecret": "ㄐㄐ讚1069",
     "lang": "zh_TW"
 }
