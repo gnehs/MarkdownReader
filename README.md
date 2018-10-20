@@ -1,21 +1,27 @@
 <p align="center">
-  <img src="https://github.com/gnehs/MarkdownReader/blob/master/icon/icon.png?raw=true" width="500px">
+  <img src="https://github.com/gnehs/MarkdownReader/blob/master/public/icon/icon.png?raw=true" width="500px">
 </p>
 
 # MarkdownReader
+
 這是一個利用 node.js 將資料夾內的 markdown 檔案變成一個精美的網頁
+
 ## 功能
-- 密碼登入
-- 自動重整
-- 繁體化文章
-- 自訂網站名稱
-- 自訂網站 Port
-- 自訂載入資料位置
-- 自訂一頁顯示多少文章
-- 搜尋
+
+-   密碼登入
+-   自動重整
+-   繁體化文章
+-   自訂網站名稱
+-   自訂網站 Port
+-   自訂載入資料位置
+-   自訂一頁顯示多少文章
+-   搜尋
+
 ## 開始使用
+
 1. `npm install`
 2. 修改 `config.json`
+
 ```
 {
     "siteName": "髒髒站",         //網站名稱
@@ -31,10 +37,14 @@
     "sessionSecret": "1069" //session secret
 }
 ```
+
 3. `npm start`
+
 ## Getting Started
+
 1.  `npm install`
 2.  edit `config.json`
+
 ```
 {
     "siteName": "early spring",  //site name
@@ -50,8 +60,11 @@
     "sessionSecret": "Spring"    //session secret
 }
 ```
+
 3. `npm start`
+
 ## Docker
+
 https://hub.docker.com/r/gnehs/markdownreader/
 
 `/app/config.json` 設定檔位置
