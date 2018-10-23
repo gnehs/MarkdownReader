@@ -161,10 +161,10 @@ function searchFiles(content) {
         let file2read = files[i]
         let fileContent = getFile(config.dataURL, file2read)
         for (var i = 0; i < content.length; i++) {
-            if (file2read.indexOf(content[i]) != -1) keywordCount += 1
-            if (fileContent.indexOf(content[i]) != -1) keywordCount += 1
+            if (file2read.match(content[i])) keywordCount += 1
+            if (fileContent.match(content[i])) keywordCount += 1
 
-            if (keywordCount == content.length) {
+            if (keywordCount >= content.length) {
                 result.push(getFileSummary(config.dataURL, file2read))
             }
         }
