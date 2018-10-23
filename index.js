@@ -153,25 +153,34 @@ function getPage(num, postData = posts) {
 //============
 //   Search
 //============
-function searchFiles(content) {
-    result = []
-    var files = fs.readdirSync(config.dataURL);
-    for (i in files) {
-        var keywordCount = 0
-        let file2read = files[i]
-        let fileContent = getFile(config.dataURL, file2read)
-        for (var i = 0; i < content.length; i++) {
-            if (file2read.match(content[i])) keywordCount += 1
-            if (fileContent.match(content[i])) keywordCount += 1
+app.get('/mdr/search/:keyword', (req, res) => res.json(
+    searchFiles(
+        req.params.keyword.split(" ")
+    )
+));
 
-            if (keywordCount >= content.length) {
-                result.push(getFileSummary(config.dataURL, file2read))
+function searchFiles(content) {
+    let url = config.dataURL
+    let result = []
+    let files = fs.readdirSync(url);
+    for (i in files) {
+        let file2read = files[i]
+        let stat = fs.statSync(url + file2read)
+        if (stat.isFile() && !file2read.match(/^\.\_/)) {
+            let keywordCount = 0
+            let fileContent = getFile(url, file2read)
+            for (var i = 0; i < content.length; i++) {
+                if (file2read.match(content[i])) keywordCount += 1
+                if (fileContent.match(content[i])) keywordCount += 1
+
+                if (keywordCount >= content.length) {
+                    result.push(getFileSummary(url, file2read))
+                }
             }
         }
     }
     return result.sort((a, b) => a.title.localeCompare(b.title, "zh-TW"));
 }
-app.get('/mdr/search/:keyword', (req, res) => res.json(searchFiles(req.params.keyword.split(" "))));
 
 //============
 //   Error
