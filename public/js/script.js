@@ -35,18 +35,9 @@ function searchBox(keyword = false) {
                 </div>
             </div>` 
 }
-/* */
-
-function headerImg() {
-    var perviewImg = Trianglify({
-        width: 2560,
-        height: 2560,
-        stroke_width: 200,
-        cell_size: 100,
-    });
-    $('#headerImg').attr('src', perviewImg.png())
-}
-/* */
+/*==========*
+ *  ready   *
+ *==========*/
 $(document).ready(function() {
     headerImg()
     if (localStorage.dark == "true")
@@ -76,6 +67,9 @@ function upadteLang() {
         $("#nav .dark span").text(lang.nav.nightMode)
     }
 }
+/*==========*
+ *   page   *
+ *==========*/
 const router = new Navigo(null, true, '#/');
 router
     .on({
@@ -98,8 +92,6 @@ router
             void(0)
         }
     })
-
-
 
 function searchPosts(text) {
     let lang = JSON.parse(window.localStorage.lang)
@@ -248,6 +240,19 @@ async function showPosts(page=0) {
     router.updatePageLinks()
 }
 
+/*==========*
+ * function *
+ *==========*/
+
+function headerImg() {
+    var perviewImg = Trianglify({
+        width: 2560,
+        height: 2560,
+        stroke_width: 200,
+        cell_size: 100,
+    });
+    $('#headerImg').attr('src', perviewImg.png())
+}
 function menuClick() {
     $('#menu .button').click(function() {
         if ($(this).attr('data-scroll') == 'N/A') return
