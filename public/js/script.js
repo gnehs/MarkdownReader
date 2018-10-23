@@ -1,3 +1,4 @@
+const loadingBox = `<div class="ts active centered inline loader"></div>`
 $(document).ready(function() {
     headerImg()
     if (localStorage.dark == "true")
@@ -41,7 +42,7 @@ router
     .hooks({
         before: (done, params) => {
             $('#menu').removeClass('show')
-            $('#app').html(`<div class="ts active centered inline loader"></div>`)
+            $('#app').html(loadingBox)
             $(document).attr("title", $("#data .siteTitle").text());
             done()
         },
@@ -72,17 +73,22 @@ function searchPosts(text) {
         router.navigate(`search/${encodeURIComponent($('input#search').val())}`);
 }
 
-function showSearch() {
+function searchBox(keyword = false) {
     let lang = JSON.parse(window.localStorage.lang)
-
+    return `<div class="ts very narrow container">
+                <div class="ts action fluid input" style="margin:20px 20px;">
+                    <input id="search" 
+                        placeholder="${lang.search.placeholder}" 
+                        type="text" 
+                        ${keyword?`value="${keyword}"`:''}>
+                    <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
+                </div>
+            </div>` 
+}
+function showSearch() {
     $("#app")
         .html('')
-        .append(`<div class="ts very narrow container">
-            <div class="ts action fluid input" style="margin:20px 20px;">
-                <input id="search" placeholder="${lang.search.placeholder}" type="text">
-                <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
-            </div>
-        </div>`)
+        .append(searchBox())
     $("input#search").on("keydown", function(event) {
         if (event.which == 13)
             searchPosts()
@@ -90,16 +96,16 @@ function showSearch() {
 }
 
 async function showSearchResult(keyword) {
-    let lang = JSON.parse(window.localStorage.lang)
+    $("#app")
+        .html('')
+        .append(searchBox(keyword))
+        .append(loadingBox)
+
+
     let result = (await axios(`/mdr/search/${keyword}`)).data
     $("#app")
         .html('')
-        .append(`<div class="ts very narrow container">
-            <div class="ts action fluid input" style="margin:20px 20px;">
-                <input id="search" placeholder="${lang.search.placeholder}" value="${keyword}" type="text">
-                <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
-            </div>
-        </div>`)
+        .append(searchBox(keyword))
         .append(result.length > 0 ? parsePosts(result) : `<h5 class="ts center aligned header">${lang.error.nothingHere}</h5>`)
 
     $("input#search").on("keydown", function(event) {
