@@ -1,3 +1,9 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 #navigator {
     margin: 0 auto;
     text-align: center;
@@ -165,7 +171,14 @@ footer
 =============*/
 
 footer {
-    margin-bottom: 80px
+    box-shadow: none;
+    margin: 2rem 0 0 0 !important;
+    background: #33363b !important;
+    color: #FFF !important;
+}
+
+footer .button {
+    filter: invert(.9);
 }
 
 
