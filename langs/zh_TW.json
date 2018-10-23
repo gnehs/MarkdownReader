@@ -57,7 +57,8 @@
     "search": {
         "nowSearch": "目前搜尋：",
         "search": "搜尋",
-        "placeholder": "輸入關鍵字來搜尋"
+        "placeholder": "輸入關鍵字來搜尋",
+        "result": " 個結果"
     },
     "post": {
         "back": "回前頁"

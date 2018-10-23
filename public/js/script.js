@@ -1,4 +1,52 @@
+/*==========*
+ * template *
+ *==========*/
 const loadingBox = `<div class="ts active centered inline loader"></div>`
+const sortButton = `<div class="ts icon buttons">
+<button class="ts button" data-sort="A-Z">
+    <i class="sort alphabet descending icon"></i>
+</button>
+<button class="ts button" data-sort="Z-A">
+    <i class="sort alphabet ascending icon"></i>
+</button>
+<button class="ts button" data-sort="time">
+    <i class="icons">
+        <i class="clock icon"></i>
+        <i class="sort descending corner icon"></i>
+    </i>
+</button>
+<button class="ts button" data-sort="timeReverse">
+    <i class="icons">
+        <i class="clock icon"></i>
+        <i class="sort ascending corner icon"></i>
+    </i>
+</button>
+</div>`
+
+function searchBox(keyword = false) {
+    let lang = JSON.parse(window.localStorage.lang)
+    return `<div class="ts very narrow container">
+                <div class="ts action fluid input" style="margin:20px 20px;">
+                    <input id="search" 
+                        placeholder="${lang.search.placeholder}" 
+                        type="text" 
+                        ${keyword?`value="${keyword}"`:''}>
+                    <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
+                </div>
+            </div>` 
+}
+/* */
+
+function headerImg() {
+    var perviewImg = Trianglify({
+        width: 2560,
+        height: 2560,
+        stroke_width: 200,
+        cell_size: 100,
+    });
+    $('#headerImg').attr('src', perviewImg.png())
+}
+/* */
 $(document).ready(function() {
     headerImg()
     if (localStorage.dark == "true")
@@ -52,15 +100,6 @@ router
     })
 
 
-function headerImg() {
-    var perviewImg = Trianglify({
-        width: 2560,
-        height: 2560,
-        stroke_width: 200,
-        cell_size: 100,
-    });
-    $('#headerImg').attr('src', perviewImg.png())
-}
 
 function searchPosts(text) {
     let lang = JSON.parse(window.localStorage.lang)
@@ -73,18 +112,6 @@ function searchPosts(text) {
         router.navigate(`search/${encodeURIComponent($('input#search').val())}`);
 }
 
-function searchBox(keyword = false) {
-    let lang = JSON.parse(window.localStorage.lang)
-    return `<div class="ts very narrow container">
-                <div class="ts action fluid input" style="margin:20px 20px;">
-                    <input id="search" 
-                        placeholder="${lang.search.placeholder}" 
-                        type="text" 
-                        ${keyword?`value="${keyword}"`:''}>
-                    <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
-                </div>
-            </div>` 
-}
 function showSearch() {
     $("#app")
         .html('')
@@ -96,22 +123,47 @@ function showSearch() {
 }
 
 async function showSearchResult(keyword) {
+    let lang = JSON.parse(window.localStorage.lang)
     $("#app")
         .html('')
         .append(searchBox(keyword))
         .append(loadingBox)
-
-
     let result = (await axios(`/mdr/search/${keyword}`)).data
+    switch (window.localStorage.sortPost){
+        case "Z-A":
+            result.sort((a, b) => (b.title).localeCompare(a.title, "zh-Hant"))
+            break;
+        case "time":
+            result.sort((a, b) => new Date(b.time) - new Date(a.time))
+            break;
+        case "timeReverse":
+            result.sort((a, b) => new Date(a.time) - new Date(b.time))
+            break;
+        default://a-z
+            result.sort((a, b) => (a.title).localeCompare(b.title, "zh-Hant"))
+    }
     $("#app")
         .html('')
         .append(searchBox(keyword))
+        .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
+            <div class="stretched column">
+                <h2 class="ts header pagetitle">${result.length}${lang.search.result}</h2>
+            </div>
+            <div class="column" style="text-align:right;">
+                ${sortButton}
+            </div>
+        </div>`)
         .append(result.length > 0 ? parsePosts(result) : `<h5 class="ts center aligned header">${lang.error.nothingHere}</h5>`)
 
     $("input#search").on("keydown", function(event) {
         if (event.which == 13)
             searchPosts()
     });
+    $(`[data-sort="${window.localStorage.sortPost}"]`).addClass("active")
+    $(`[data-sort]`).click(function(){
+        window.localStorage.sortPost=$(this).attr(`data-sort`)
+        showSearchResult(keyword)
+   })
     router.updatePageLinks()
 }
 
@@ -168,8 +220,6 @@ async function showPosts(page=0) {
         default://a-z
             result.sort((a, b) => (a.title).localeCompare(b.title, "zh-Hant"))
     }
-   
-    console.log(result)
 
     let pagination = `<div class="pagination">`
     for (i=0; i < totalPage; i++) {
@@ -185,26 +235,7 @@ async function showPosts(page=0) {
                 <h2 class="ts header pagetitle">${lang.page.nowPage.before}${page+1}${lang.page.nowPage.middle}${totalPage}${lang.page.nowPage.after}</h2>
             </div>
             <div class="column" style="text-align:right;">
-                <div class="ts icon buttons">
-                    <button class="ts button" data-sort="A-Z">
-                        <i class="sort alphabet descending icon"></i>
-                    </button>
-                    <button class="ts button" data-sort="Z-A">
-                        <i class="sort alphabet ascending icon"></i>
-                    </button>
-                    <button class="ts button" data-sort="time">
-                        <i class="icons">
-                            <i class="clock icon"></i>
-                            <i class="sort descending corner icon"></i>
-                        </i>
-                    </button>
-                    <button class="ts button" data-sort="timeReverse">
-                        <i class="icons">
-                            <i class="clock icon"></i>
-                            <i class="sort ascending corner icon"></i>
-                        </i>
-                    </button>
-                </div>
+                ${sortButton}
             </div>
         </div>`)
         .append(parsePosts( result.splice(page*24, 24) ))

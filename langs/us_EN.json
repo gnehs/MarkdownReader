@@ -57,7 +57,8 @@
     "search": {
         "nowSearch": "Current search：",
         "search": "Search",
-        "placeholder": "Enter keywords to search"
+        "placeholder": "Enter keywords to search",
+        "result": " result(s)"
     },
     "post": {
         "back": "Back"
