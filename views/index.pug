@@ -1,7 +1,7 @@
 extends _layout.pug
 block content
-	#nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
-		.ts.container
+	.ts.container
+		#nav.ts.basic.fluid.borderless.menu.horizontally.scrollable(data-sitename=title)
 			a.item.home(href="/",data-navigo)
 				i.icon.home
 				span Home

@@ -19,13 +19,18 @@ function check() {
     //判斷是否為空(全空格也算空)
     if (pass) {
         window.sessionStorage["pass"] = pass
-        $.post("/login/", { userPASS: pass }, data => data ?
-            document.location.href = "/" :
-            swal({
-                title: wrongPassword,
-                icon: "error",
-            })
-        );
+        $(`[onclick="check()"]`).addClass("loading")
+        $.post("/login/", { userPASS: pass }, data => {
+            if (data)
+                document.location.href = "/"
+            else {
+                $(`[onclick="check()"]`).removeClass("loading")
+                swal({
+                    title: wrongPassword,
+                    icon: "error",
+                })
+            }
+        });
         return false;
     }
     //非法輸入提示

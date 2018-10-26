@@ -2,7 +2,7 @@
  * template *
  *==========*/
 const loadingBox = `<div class="ts active centered inline loader"></div>`
-const sortButton = `<div class="ts icon buttons">
+const sortButton = `<div class="ts icon circular buttons">
 <button class="ts button" data-sort="A-Z">
     <i class="sort alphabet descending icon"></i>
 </button>
@@ -39,7 +39,6 @@ function searchBox(keyword = false) {
  *  ready   *
  *==========*/
 $(document).ready(function() {
-    headerImg()
     if (localStorage.dark == "true")
         $('body').addClass("dark")
     $('[data-dark]').click(function() {
@@ -139,7 +138,7 @@ async function showSearchResult(keyword) {
         .append(searchBox(keyword))
         .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
             <div class="stretched column">
-                <h2 class="ts header pagetitle">${result.length}${lang.search.result}</h2>
+                <h3 class="ts header pagetitle">${result.length}${lang.search.result}</h3>
             </div>
             <div class="column" style="text-align:right;">
                 ${sortButton}
@@ -224,7 +223,7 @@ async function showPosts(page=0) {
         .html('')
         .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
             <div class="stretched column">
-                <h2 class="ts header pagetitle">${lang.page.nowPage.before}${page+1}${lang.page.nowPage.middle}${totalPage}${lang.page.nowPage.after}</h2>
+                <h3 class="ts header pagetitle">${lang.page.nowPage.before}${page+1}${lang.page.nowPage.middle}${totalPage}${lang.page.nowPage.after}</h3>
             </div>
             <div class="column" style="text-align:right;">
                 ${sortButton}
@@ -244,15 +243,6 @@ async function showPosts(page=0) {
  * function *
  *==========*/
 
-function headerImg() {
-    var perviewImg = Trianglify({
-        width: 2560,
-        height: 2560,
-        stroke_width: 200,
-        cell_size: 100,
-    });
-    $('#headerImg').attr('src', perviewImg.png())
-}
 function menuClick() {
     $('#menu .button').click(function() {
         if ($(this).attr('data-scroll') == 'N/A') return

@@ -23,20 +23,6 @@ a.ts.card:hover:not(.no):not(.earlyspring) {
 }
 
 
-/*===========
-Header
-===========*/
-
-header.home {
-    padding: 5em 2em !important;
-    padding-bottom: calc(4em + 48px) !important;
-}
-
-header .header {
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4) !important;
-}
-
-
 /*==========
 pagination
 ==========*/
@@ -56,25 +42,35 @@ NAV
 ==========*/
 
 #nav {
-    margin-bottom: 35px;
-    margin-top: -48px;
-    background: transparent;
+    /* background: transparent;*/
     overflow: scroll;
-    width: 100vw;
     box-shadow: none;
+    margin-bottom: 20px;
+    padding: 5px;
+    border-radius: 0 0 10px 10px;
+    position: relative;
+}
+
+#nav:before {
+    content: attr(data-sitename);
+    position: absolute;
+    text-align: center;
+    left: 0;
+    right: 0;
+    display: block;
+    top: 0;
+    line-height: 50px;
+    font-size: 16px;
+}
+
+@media screen and (max-width: 767px) {
+    #nav:before {
+        display: none;
+    }
 }
 
 #nav a.item {
     border-radius: 4px;
-}
-
-#nav .right a.item {
-    margin-right: 5px;
-}
-
-#nav a.item:hover,
-#nav a.active.item {
-    background: rgba(0, 0, 0, 0.07);
 }
 
 #nav .ts.container {
@@ -82,10 +78,6 @@ NAV
     padding-bottom: 4px;
     padding-left: .88rem !important;
     padding-right: .88rem !important;
-}
-
-#nav .input .icon {
-    color: white;
 }
 
 
@@ -171,14 +163,11 @@ footer
 =============*/
 
 footer {
-    box-shadow: none;
+    box-shadow: none !important;
     margin: 2rem 0 0 0 !important;
-    background: #33363b !important;
-    color: #FFF !important;
-}
-
-footer .button {
-    filter: invert(.9);
+    padding: 1em 1em !important;
+    border-radius: 10px 10px 0 0 !important;
+    background: #EEE !important;
 }
 
 

@@ -12,15 +12,10 @@ html
     body
         #data(style="display:none")
             .siteTitle=title
-        header.ts.heading.vertically.padded.fluid.slate(class=(page=="login"?"login":"home"))
-            .image
-                img#headerImg
-            a.ts.container(href='/',data-navigo)
-                h1.ts.center.aligned.header=title
         block content
         .ts.container(style="flex-grow: 1")
-        footer.ts.bottom.attached.horizontally.fitted.fluid.secondary.segment
-            .ts.container(style="display: flex;")
+        .ts.container
+            footer.ts.bottom.attached.horizontally.fitted.fluid.secondary.segment(style="display: flex;")
                 div(style="line-height: 34px;") gnehs.net 2018
                 div(style="flex: 1;text-align:right")
                     .ts.separated.circular.compact.basic.icon.buttons
@@ -29,7 +24,6 @@ html
                         a.ts.button(data-dark)
                             i.icon.moon
         script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
-        script(src="//cdnjs.cloudflare.com/ajax/libs/trianglify/1.2.0/trianglify.min.js")
         script(src='//cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js')
         script(src='//unpkg.com/sweetalert/dist/sweetalert.min.js')
         script(src='/js/navigo.min.js')
