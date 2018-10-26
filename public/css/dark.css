@@ -2,6 +2,11 @@ body.dark {
     background: #000;
 }
 
+.dark input {
+    filter: invert(0.89);
+    border: 0px solid !important;
+}
+
 .dark header {
     box-shadow: none !important;
 }
@@ -50,6 +55,7 @@ card
 .dark a.ts.card.card.card.card.card.card:hover {
     background: #292626;
     box-shadow: none !important;
+    transform: none !important;
 }
 
 .dark a.ts.card.card.card.card.card.card:active {
@@ -71,8 +77,8 @@ nav
     background-color: #1d1d1d;
 }
 
-.dark #nav::before {
-    color: #FFF;
+.dark #nav .sitetitle {
+    color: #FFF !important;
 }
 
 .dark #nav .item.item {

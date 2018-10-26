@@ -24,6 +24,15 @@ a.ts.card:hover:not(.no):not(.earlyspring) {
 
 
 /*==========
+searchbox
+==========*/
+
+#searchbox {
+    margin: 25px 0;
+}
+
+
+/*==========
 pagination
 ==========*/
 
@@ -51,20 +60,28 @@ NAV
     position: relative;
 }
 
-#nav:before {
-    content: attr(data-sitename);
+#nav .sitetitle {
     position: absolute;
     text-align: center;
     left: 0;
     right: 0;
-    display: block;
     top: 0;
-    line-height: 50px;
+    line-height: 40px;
     font-size: 16px;
+    display: table;
+    margin: 5px auto;
+    color: #5a5a5a;
+    padding: 0 7px;
 }
 
 @media screen and (max-width: 767px) {
-    #nav:before {
+    #nav a.item {
+        padding: .92857em .85em;
+    }
+    #nav a.item i {
+        margin: 0;
+    }
+    #nav a.item span {
         display: none;
     }
 }

@@ -26,7 +26,7 @@ const sortButton = `<div class="ts icon circular buttons">
 function searchBox(keyword = false) {
     let lang = JSON.parse(window.localStorage.lang)
     return `<div class="ts very narrow container">
-                <div class="ts action fluid input" style="margin:20px 20px;">
+                <div class="ts action fluid input" id="searchbox">
                     <input id="search" 
                         placeholder="${lang.search.placeholder}" 
                         type="text" 
