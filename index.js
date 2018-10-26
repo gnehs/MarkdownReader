@@ -4,6 +4,7 @@
 const fs = require('fs'); //檔案系統
 const excerpt = require("html-excerpt"); // 取摘要
 const config = require("./config.json"); // 設定
+const package = require("./package.json"); // package.json
 const lang = require("./langs/" + config.lang + '.json'); // Lang
 
 // express
@@ -35,6 +36,7 @@ converter.setOption('tasklists', true);
 converter.setOption('emoji', true);
 converter.setOption('openLinksInNewWindow', true);
 
+const timeout = ms => new Promise(res => setTimeout(res, ms))
 
 function getFileSummary(url, filename) {
     var data = fs.readFileSync(url + filename);
@@ -51,7 +53,13 @@ function getFileSummary(url, filename) {
 }
 
 function getFile(url, filename) {
-    return converter.makeHtml(fs.readFileSync(url + filename).toString())
+    let fileContent;
+    try {
+        fileContent = converter.makeHtml(fs.readFileSync(url + filename).toString())
+    } catch (e) {
+        fileContent = false
+    }
+    return fileContent
 }
 
 
@@ -97,7 +105,7 @@ app
     .get('/login/', (req, res) => {
         if (config.password.enabled && req.body.userPASS != config.password.password)
             res.render('login', {
-                title: lang.login.header + ' - ' + config.siteName,
+                title: config.siteName,
                 lang: lang,
                 page: 'login'
             })
@@ -120,14 +128,14 @@ app.use((req, res, next) => {
 //    Main
 //============
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) =>
     res.render('index', {
         title: config.siteName,
         config: config,
         lang: lang,
         page: 'home',
     })
-});
+);
 
 app.get('/mdr/posts', (req, res) => res.json(posts));
 
@@ -141,6 +149,29 @@ app.get('/mdr/post/:id', (req, res) => res.json({
 //============
 // pageSwitch
 //============
+function searchFiles(keywords) {
+    let url = config.dataURL
+    let result = []
+    let files = fs.readdirSync(url);
+    for (i in files) {
+        let file2read = files[i]
+        let stat = fs.statSync(url + file2read)
+        if (stat.isFile() && !file2read.match(/^\.\_/)) {
+            let keywordCount = 0
+            let fileContent = getFile(url, file2read)
+            if (fileContent) {
+                for (var i = 0; i < keywords.length; i++) {
+                    if (file2read.match(keywords[i])) keywordCount += 1
+                    if (fileContent.match(keywords[i])) keywordCount += 1
+                    if (keywordCount >= keywords.length) {
+                        result.push(getFileSummary(url, file2read))
+                    }
+                }
+            }
+        }
+    }
+    return result.sort((a, b) => a.title.localeCompare(b.title, "zh-TW"));
+}
 
 function getPage(num, postData = posts) {
     var pages = Math.ceil(postData.length / config.postPerPage); //算出所需頁數
@@ -159,35 +190,11 @@ app.get('/mdr/search/:keyword', (req, res) => res.json(
     )
 ));
 
-function searchFiles(content) {
-    let url = config.dataURL
-    let result = []
-    let files = fs.readdirSync(url);
-    for (i in files) {
-        let file2read = files[i]
-        let stat = fs.statSync(url + file2read)
-        if (stat.isFile() && !file2read.match(/^\.\_/)) {
-            let keywordCount = 0
-            let fileContent = getFile(url, file2read)
-            for (var i = 0; i < content.length; i++) {
-                if (file2read.match(content[i])) keywordCount += 1
-                if (fileContent.match(content[i])) keywordCount += 1
-
-                if (keywordCount >= content.length) {
-                    result.push(getFileSummary(url, file2read))
-                }
-            }
-        }
-    }
-    return result.sort((a, b) => a.title.localeCompare(b.title, "zh-TW"));
-}
 
 //============
 //   Error
 //============
-app.use((req, res, next) => {
-    res.redirect("/")
-});
+app.use((req, res, next) => res.redirect("/"));
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('500')
@@ -197,9 +204,14 @@ app.use((err, req, res, next) => {
 //   Start
 //============
 app.listen(config.sitePort, () => {
-    console.log(`MarkdownReader`)
-    console.log(Date())
-    console.log(`http://localhost:${config.sitePort}`)
+    console.log(`[MarkdownReader] ${package.version}`)
+    console.log(`[MarkdownReader] ${config.siteName}`)
+    console.log(`[MarkdownReader] ${Date()}`)
+    console.log(`[MarkdownReader] http://localhost:${config.sitePort}`)
     getDir()
 })
-fs.watch(config.dataURL, (eventType, filename) => { getDir() })
+fs.watch(config.dataURL, async() => {
+    await timeout(5000); //等待五秒鐘
+    console.log(`[MarkdownReader] ${config.dataURL} update data`)
+    getDir()
+})
