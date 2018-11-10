@@ -9,15 +9,13 @@ const lang = require("./langs/" + config.lang + '.json'); // Lang
 
 // express
 const express = require('express');
-const bodyParser = require('body-parser'); // 讀入 post 請求
-const session = require('express-session'); // session
 const app = express();
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
-app.use(bodyParser.urlencoded({
+app.use(require('body-parser').urlencoded({
     extended: true,
 }));
-app.use(session({
+app.use(require('express-session')({
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
@@ -26,15 +24,16 @@ app.use('/', express.static('public'));
 
 
 // Markdown viewer
-const converter = new(require('showdown')).Converter()
-converter.setOption('simplifiedAutoLink', true);
-converter.setOption('excludeTrailingPunctuationFromURLs', true);
-converter.setOption('simpleLineBreaks', true);
-converter.setOption('tables', true);
-converter.setOption('tablesHeaderId', true);
-converter.setOption('tasklists', true);
-converter.setOption('emoji', true);
-converter.setOption('openLinksInNewWindow', true);
+const converter = new(require('showdown')).Converter({
+    'simplifiedAutoLink': true,
+    'excludeTrailingPunctuationFromURLs': true,
+    'simpleLineBreaks': true,
+    'tables': true,
+    'tablesHeaderId': true,
+    'tasklists': true,
+    'emoji': true,
+    'openLinksInNewWindow': true
+})
 
 const timeout = ms => new Promise(res => setTimeout(res, ms))
 
@@ -171,19 +170,6 @@ function searchFiles(keywords) {
         }
     }
     return result.sort((a, b) => a.title.localeCompare(b.title, "zh-TW"));
-}
-
-function getPage(num, postData = posts) {
-    var pages = Math.ceil(postData.length / config.postPerPage); //算出所需頁數
-    if (num > pages) {
-        return
-    } //確定真的收到數字及收到的數字是否大於總頁數
-    var firstPost = (num - 1) * config.postPerPage //輸出的第一個文章
-    let postExport = postData.slice(firstPost, firstPost + config.postPerPage)
-    return {
-        postExport,
-        pages
-    }
 }
 
 //============
