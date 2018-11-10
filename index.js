@@ -175,10 +175,15 @@ function searchFiles(keywords) {
 
 function getPage(num, postData = posts) {
     var pages = Math.ceil(postData.length / config.postPerPage); //算出所需頁數
-    if (num > pages) { return } //確定真的收到數字及收到的數字是否大於總頁數
+    if (num > pages) {
+        return
+    } //確定真的收到數字及收到的數字是否大於總頁數
     var firstPost = (num - 1) * config.postPerPage //輸出的第一個文章
     let postExport = postData.slice(firstPost, firstPost + config.postPerPage)
-    return { postExport, pages }
+    return {
+        postExport,
+        pages
+    }
 }
 
 //============
@@ -210,8 +215,16 @@ app.listen(config.sitePort, () => {
     console.log(`[MarkdownReader] http://localhost:${config.sitePort}`)
     getDir()
 })
-fs.watch(config.dataURL, async() => {
-    await timeout(5000); //等待五秒鐘
-    console.log(`[MarkdownReader] ${config.dataURL} update data`)
-    getDir()
+
+let isUpdateing = false
+fs.watch(config.dataURL, async () => {
+    if (isUpdateing) {
+        await timeout(10000); // wait for 10s
+        isUpdateing = false
+    } else {
+        isUpdateing = true
+        await timeout(10000); // wait for 10s
+        console.log(`[MarkdownReader] ${config.dataURL} update data`)
+        getDir()
+    }
 })
