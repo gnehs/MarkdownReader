@@ -185,7 +185,14 @@ app.get('/mdr/search/:keyword', (req, res) => res.json(
 //============
 //   Error
 //============
-app.use((req, res, next) => res.redirect("/"));
+app.use((req, res, next) =>
+    res.render('index', {
+        title: config.siteName,
+        config: config,
+        lang: lang,
+        page: 'home',
+    })
+);
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('500')
