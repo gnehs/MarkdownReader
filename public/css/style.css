@@ -56,8 +56,8 @@ NAV
     box-shadow: none;
     margin-bottom: 20px;
     padding: 5px;
-    border-radius: 0 0 10px 10px;
     position: relative;
+    box-shadow: inset 0px -1px 8px -3px #ececec;
 }
 
 #nav .sitetitle {
@@ -69,18 +69,19 @@ NAV
     line-height: 40px;
     font-size: 16px;
     display: block;
-    margin: 5px auto;
+    margin: 0 auto;
     color: #5a5a5a;
-    padding: 0 7px;
 }
 
 @media screen and (max-width: 767px) {
     #nav a.item {
         padding: .92857em .85em;
     }
+
     #nav a.item i {
         margin: 0;
     }
+
     #nav a.item span {
         display: none;
     }
@@ -90,12 +91,6 @@ NAV
     border-radius: 4px;
 }
 
-#nav .ts.container {
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: .88rem !important;
-    padding-right: .88rem !important;
-}
 
 
 /*==========
@@ -180,11 +175,13 @@ footer
 =============*/
 
 footer {
-    box-shadow: none !important;
-    margin: 2rem 0 0 0 !important;
     padding: 1em 1em !important;
-    border-radius: 10px 10px 0 0 !important;
-    background: #f7f7f7!important;
+    margin: 2rem 0 0 0 !important;
+    box-shadow: none !important;
+}
+
+footer>div {
+    display: flex !important;
 }
 
 
@@ -265,6 +262,7 @@ menu
     from {
         transform: translateX(-120px);
     }
+
     to {
         transform: translateX(0px);
     }
@@ -274,6 +272,7 @@ menu
     from {
         transform: translateX(120px);
     }
+
     to {
         transform: translateX(0px);
     }

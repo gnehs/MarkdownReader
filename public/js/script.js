@@ -33,15 +33,15 @@ function searchBox(keyword = false) {
                         ${keyword?`value="${keyword}"`:''}>
                     <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
                 </div>
-            </div>` 
+            </div>`
 }
 /*==========*
  *  ready   *
  *==========*/
-$(document).ready(function() {
+$(document).ready(function () {
     if (localStorage.dark == "true")
         $('body').addClass("dark")
-    $('[data-dark]').click(function() {
+    $('[data-dark]').click(function () {
         let isDark = $('body').hasClass("dark")
         if (isDark) {
             $('body').removeClass("dark")
@@ -51,7 +51,7 @@ $(document).ready(function() {
             localStorage.dark = "true"
         }
     });
-    $.get("/lang", function(data) {
+    $.get("/lang", function (data) {
         window.localStorage.lang = JSON.stringify(data)
         upadteLang()
     });
@@ -69,19 +69,20 @@ function upadteLang() {
 /*==========*
  *   page   *
  *==========*/
-const router = new Navigo(null, true, '#/');
+const router = new Navigo('/');
 router
     .on({
         'search/:keyword': params => showSearchResult(params.keyword),
         'search': showSearch,
         'post/:filename': params => showPost(params.filename),
-        'posts/:page': params => showPosts(Number(params.page) - 1, params.sortby),
+        'posts/:page': params => showPosts(Number(params.page) - 1),
         '*': () => showPosts(0)
     })
     .resolve()
 router
     .hooks({
         before: (done, params) => {
+            console.log(params)
             $('#menu').removeClass('show')
             $('#app').html(loadingBox)
             $(document).attr("title", $("#data .siteTitle").text());
@@ -107,7 +108,7 @@ function showSearch() {
     $("#app")
         .html('')
         .append(searchBox())
-    $("input#search").on("keydown", function(event) {
+    $("input#search").on("keydown", function (event) {
         if (event.which == 13)
             searchPosts()
     });
@@ -120,7 +121,7 @@ async function showSearchResult(keyword) {
         .append(searchBox(keyword))
         .append(loadingBox)
     let result = (await axios(`/mdr/search/${keyword}`)).data
-    switch (window.localStorage.sortPost){
+    switch (window.localStorage.sortPost) {
         case "Z-A":
             result.sort((a, b) => (b.title).localeCompare(a.title, "zh-Hant"))
             break;
@@ -130,7 +131,7 @@ async function showSearchResult(keyword) {
         case "timeReverse":
             result.sort((a, b) => new Date(a.time) - new Date(b.time))
             break;
-        default://a-z
+        default: //a-z
             result.sort((a, b) => (a.title).localeCompare(b.title, "zh-Hant"))
     }
     $("#app")
@@ -146,15 +147,15 @@ async function showSearchResult(keyword) {
         </div>`)
         .append(result.length > 0 ? parsePosts(result) : `<h5 class="ts center aligned header">${lang.error.nothingHere}</h5>`)
 
-    $("input#search").on("keydown", function(event) {
+    $("input#search").on("keydown", function (event) {
         if (event.which == 13)
             searchPosts()
     });
     $(`[data-sort="${window.localStorage.sortPost}"]`).addClass("active")
-    $(`[data-sort]`).click(function(){
-        window.localStorage.sortPost=$(this).attr(`data-sort`)
+    $(`[data-sort]`).click(function () {
+        window.localStorage.sortPost = $(this).attr(`data-sort`)
         showSearchResult(keyword)
-   })
+    })
     router.updatePageLinks()
 }
 
@@ -175,13 +176,13 @@ function parsePosts(posts) {
     return r
 }
 async function showPost(filename) {
-    let result=(await axios(`/mdr/post/${filename}`)).data
+    let result = (await axios(`/mdr/post/${filename}`)).data
 
     $("#app")
         .html('')
-        .append(`<h3 class="ts header">${result.title}</h3><div id="content">${result.content}</div>`)
+        .append(`<h3 class="ts header">${result.title}</h3><div id="content">${result.content?result.content:"找不到這個檔案"}</div>`)
 
-    $(document).attr("title",result.title);
+    $(document).attr("title", result.title);
     let chapter = $('#content h1,#content h2,#content h3,#content h4,#content h5,#content h6')
     chapter.attr("class", "ts header")
     if (chapter.length == 0) {
@@ -192,13 +193,13 @@ async function showPost(filename) {
         scrollspy()
     }
 }
-async function showPosts(page=0) {
-    if(!window.localStorage.sortPost) window.localStorage.sortPost='A-Z'
-    let result=(await axios('/mdr/posts')).data
-    let totalPage=Math.floor(result.length / 24 + 1)
+async function showPosts(page = 0) {
+    if (!window.localStorage.sortPost) window.localStorage.sortPost = 'A-Z'
+    let result = (await axios('/mdr/posts')).data
+    let totalPage = Math.floor(result.length / 24 + 1)
     let lang = JSON.parse(window.localStorage.lang)
-    
-    switch (window.localStorage.sortPost){
+
+    switch (window.localStorage.sortPost) {
         case "Z-A":
             result.sort((a, b) => (b.title).localeCompare(a.title, "zh-Hant"))
             break;
@@ -208,17 +209,17 @@ async function showPosts(page=0) {
         case "timeReverse":
             result.sort((a, b) => new Date(a.time) - new Date(b.time))
             break;
-        default://a-z
+        default: //a-z
             result.sort((a, b) => (a.title).localeCompare(b.title, "zh-Hant"))
     }
 
     let pagination = `<div class="pagination">`
-    for (i=0; i < totalPage; i++) {
-        pagination+=`<a class="ts circular button ${i==page?`active`:``}" 
+    for (i = 0; i < totalPage; i++) {
+        pagination += `<a class="ts circular button ${i==page?`active`:``}" 
                         href="posts/${i+1}" 
                         data-navigo>${i+1}</a>`
     }
-    pagination+=`</div>`
+    pagination += `</div>`
     $("#app")
         .html('')
         .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
@@ -229,12 +230,12 @@ async function showPosts(page=0) {
                 ${sortButton}
             </div>
         </div>`)
-        .append(parsePosts( result.splice(page*24, 24) ))
+        .append(parsePosts(result.splice(page * 24, 24)))
         .append(pagination)
     $(`[data-sort="${window.localStorage.sortPost}"]`).addClass("active")
-    $(`[data-sort]`).click(function(){
-         window.localStorage.sortPost=$(this).attr(`data-sort`)
-         showPosts(page)
+    $(`[data-sort]`).click(function () {
+        window.localStorage.sortPost = $(this).attr(`data-sort`)
+        showPosts(page)
     })
     router.updatePageLinks()
 }
@@ -244,14 +245,14 @@ async function showPosts(page=0) {
  *==========*/
 
 function menuClick() {
-    $('#menu .button').click(function() {
+    $('#menu .button').click(function () {
         if ($(this).attr('data-scroll') == 'N/A') return
         $('html,body').animate({
             scrollTop: $(this).attr('data-scroll') - 60
         }, 200);
     });
 }
-$(window).scroll(function() {
+$(window).scroll(function () {
     scrollspy()
 });
 
@@ -282,7 +283,9 @@ function scrollspy() {
             $('#menu').addClass('toPrevious')
         }
         $('#menu').addClass('changeing')
-        setTimeout(function() { $('#menu').removeClass('changeing toNext toPrevious') }, 200 + 1);
+        setTimeout(function () {
+            $('#menu').removeClass('changeing toNext toPrevious')
+        }, 200 + 1);
     }
 
     if (previousChapter == undefined || previousChapter.length == 0)
