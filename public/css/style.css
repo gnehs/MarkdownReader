@@ -1,3 +1,9 @@
+html,
+body {
+    width: 100vw;
+    overflow-x: hidden;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -192,7 +198,9 @@ menu
 #menu {
     position: fixed;
     bottom: 5px;
-    width: 420px;
+    display: flex;
+    width: 500px;
+    max-width: 100vw;
     height: 40px;
     right: 0;
     margin: auto;
@@ -208,8 +216,22 @@ menu
     transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1.79);
 }
 
+@media screen and (max-width: 600px) {
+
+    #menu {
+        border-radius: 0;
+        bottom: 0;
+    }
+}
+
 #menu:not(.show) {
     transform: translateY(70px);
+}
+
+#menu .button.previousChapter,
+#menu .button.nowChapter,
+#menu .button.nextChapter {
+    flex: 1;
 }
 
 #menu .button {
@@ -217,7 +239,6 @@ menu
     overflow: hidden;
     cursor: pointer;
     user-select: none;
-    width: 115px;
     margin: 0;
     text-overflow: ellipsis;
     text-align: center;
