@@ -180,7 +180,10 @@ async function showPost(filename) {
 
     $("#app")
         .html('')
-        .append(`<h3 class="ts header">${result.title}</h3><div id="content">${result.content?result.content:"找不到這個檔案"}</div>`)
+        .append(`<h3 class="ts center aligned header">${result.title}</h3>`)
+        .append(`<div class="ts divider"></div>`)
+        .append(`<div id="content">${result.content?result.content:"找不到這個檔案"}</div>`)
+        .append(`<div class="ts horizontal divider">本文結束</div>`)
 
     $(document).attr("title", result.title);
     let chapter = $('#content h1,#content h2,#content h3,#content h4,#content h5,#content h6')

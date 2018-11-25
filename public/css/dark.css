@@ -27,7 +27,7 @@ body.dark {
     filter: invert(.9);
 }
 
-.dark .ts.divider {
+.dark .ts.divider:not(.horizontal) {
     border-bottom: 1px solid #323232 !important;
 }
 
