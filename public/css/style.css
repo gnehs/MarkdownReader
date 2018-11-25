@@ -10,6 +10,12 @@ body {
     min-height: 100vh;
 }
 
+img {
+    max-width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+
 #navigator {
     margin: 0 auto;
     text-align: center;
