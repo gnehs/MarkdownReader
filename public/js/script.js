@@ -100,8 +100,10 @@ function searchPosts(text) {
             title: lang.search.placeholder,
             icon: "error",
         })
-    else
-        router.navigate(`search/${encodeURIComponent($('input#search').val())}`);
+    else {
+        let keyword = encodeURIComponent($('input#search').val())
+        router.navigate(`search/${keyword}`);
+    }
 }
 
 function showSearch() {
@@ -260,7 +262,7 @@ $(window).scroll(function () {
 });
 
 function scrollspy() {
-    var chapter = $('#content h1,#content h2,#content h3,#content h4,#content h5,#content h6')
+    let chapter = $('#content h1,#content h2,#content h3,#content h4,#content h5,#content h6')
     if ($(window).scrollTop() - 80 > $('.ts.container').offset().top && chapter.length > 0) {
         $('#menu').addClass('show')
     } else {
@@ -269,16 +271,16 @@ function scrollspy() {
     }
 
     // Get container scroll position
-    var fromTop = $(window).scrollTop();
-
-    for (var i = 0; i < chapter.length; i++) {
+    let fromTop = $(window).scrollTop();
+    let previousChapter, nowChapter, nextChapter
+    for (let i = 0; i < chapter.length; i++) {
         if ($(chapter[i]).offset().top < fromTop + 61) {
-            var previousChapter = $(chapter[i - 1])
-            var nowChapter = $(chapter[i])
-            var nextChapter = $(chapter[i + 1])
+            previousChapter = $(chapter[i - 1])
+            nowChapter = $(chapter[i])
+            nextChapter = $(chapter[i + 1])
         }
     }
-    if (nowChapter != undefined && $('#menu .nowChapter').attr('data-scroll') != nowChapter.offset().top) {
+    if (nowChapter && $('#menu .nowChapter').attr('data-scroll') != nowChapter.offset().top) {
         if (previousChapter.length != 0 && $('#menu .nowChapter').attr('data-scroll') == previousChapter.offset().top) {
             $('#menu').addClass('toNext')
         }
@@ -291,17 +293,17 @@ function scrollspy() {
         }, 200 + 1);
     }
 
-    if (previousChapter == undefined || previousChapter.length == 0)
+    if (!previousChapter || previousChapter.length == 0)
         $('#menu .previousChapter').text('-').attr('data-scroll', 'N/A')
     else
         $('#menu .previousChapter').text(previousChapter.text()).attr('data-scroll', previousChapter.offset().top);
 
-    if (nowChapter == undefined || nowChapter.length == 0)
+    if (!nowChapter || nowChapter.length == 0)
         $('#menu .nowChapter').text('-').attr('data-scroll', 'N/A')
     else
         $('#menu .nowChapter').text(nowChapter.text()).attr('data-scroll', nowChapter.offset().top)
 
-    if (nextChapter == undefined || nextChapter.length == 0)
+    if (!nextChapter || nextChapter.length == 0)
         $('#menu .nextChapter').text('-').attr('data-scroll', 'N/A')
     else
         $('#menu .nextChapter').text(nextChapter.text()).attr('data-scroll', nextChapter.offset().top)
