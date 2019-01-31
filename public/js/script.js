@@ -236,6 +236,7 @@ async function showPosts(page = 0) {
                 ${sortButton}
             </div>
         </div>`)
+        .append(`<div class="ts divider"></div>`)
         .append(parsePosts(result.splice(page * 24, 24)))
         .append(pagination)
     $(`[data-sort="${window.localStorage.sortPost}"]`).addClass("active")
