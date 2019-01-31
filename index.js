@@ -5,6 +5,7 @@ const fs = require('fs'); //檔案系統
 const excerpt = require("html-excerpt"); // 取摘要
 const config = require("./config.json"); // 設定
 const package = require("./package.json"); // package.json
+const schedule = require('node-schedule'); // 排程
 const lang = require("./langs/" + config.lang + '.json'); // Lang
 
 // express
@@ -42,7 +43,7 @@ function getFileSummary(url, filename) {
     let time = fs.statSync(url + filename).mtime
     post = converter.makeHtml(data.toString())
     title = excerpt.text(filename.replace(/\.[^.]+$/, ''), 18, '...')
-    postSummary = excerpt.text(post, 180, '...').replace(/<br \/>/g, ' / ');
+    postSummary = excerpt.text(post, 180, '...').replace(/<br \/>/g, ' ');
     return {
         title: title,
         summary: postSummary,
@@ -202,22 +203,17 @@ app.use((err, req, res, next) => {
 //   Start
 //============
 app.listen(config.sitePort, () => {
-    console.log(`[MarkdownReader] ${package.version}`)
-    console.log(`[MarkdownReader] ${config.siteName}`)
-    console.log(`[MarkdownReader] ${Date()}`)
-    console.log(`[MarkdownReader] http://localhost:${config.sitePort}`)
+    console.log(`[MarkdownReader@${package.version}] ${config.siteName} http://localhost:${config.sitePort}`)
     getDir()
 })
 
-let isUpdateing = false
-fs.watch(config.dataURL, async () => {
-    if (isUpdateing) {
-        await timeout(10000); // wait for 10s
-        isUpdateing = false
-    } else {
-        isUpdateing = true
-        await timeout(10000); // wait for 10s
-        console.log(`[MarkdownReader] ${config.dataURL} update data`)
-        getDir()
-    }
+let updateData = schedule.scheduleJob('*/10 * * * * *', function () {
+    console.log(`已更新`)
+    getDir()
+    updateData.cancel()
+    updateData.nextInvocation()
+});
+fs.watch(config.dataURL, () => {
+    console.log(`已排定更新`)
+    updateData.reschedule('*/15 * * * * *')
 })
