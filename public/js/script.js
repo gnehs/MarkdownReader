@@ -82,10 +82,10 @@ router
 router
     .hooks({
         before: (done, params) => {
-            console.log(params)
             $('#menu').removeClass('show')
             $('#app').html(loadingBox)
             $(document).attr("title", $("#data .siteTitle").text());
+            $('html, body').scrollTop(0)
             done()
         },
         after: params => {
@@ -199,7 +199,7 @@ async function showPost(filename) {
 async function showPosts(page = 0) {
     if (!window.localStorage.sortPost) window.localStorage.sortPost = 'A-Z'
     let result = (await axios('/mdr/posts')).data
-    let totalPage = Math.floor(result.length / 24 + 1)
+    let totalPage = Math.ceil(result.length / 24)
     let lang = JSON.parse(window.localStorage.lang)
 
     switch (window.localStorage.sortPost) {
