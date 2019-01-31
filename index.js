@@ -69,9 +69,8 @@ function getDir(url = config.dataURL) {
         "url": config.dataURL
     }]
     var files = fs.readdirSync(url);
-    for (i in files) {
-        let file2read = files[i]
-        let stat = fs.statSync(url + files[i])
+    for (let file2read of files) {
+        let stat = fs.statSync(url + file2read)
         if (stat.isFile() && !file2read.match(/^\.\_/))
             posts.push(getFileSummary(url, file2read))
     }
@@ -153,8 +152,7 @@ function searchFiles(keywords) {
     let url = config.dataURL
     let result = []
     let files = fs.readdirSync(url);
-    for (i in files) {
-        let file2read = files[i]
+    for (let file2read of files) {
         let stat = fs.statSync(url + file2read)
         if (stat.isFile() && !file2read.match(/^\.\_/)) {
             let keywordCount = 0
@@ -207,13 +205,14 @@ app.listen(config.sitePort, () => {
     getDir()
 })
 
+//=================
+//   Update Data
+//=================
+
 let updateData = schedule.scheduleJob('*/10 * * * * *', function () {
-    console.log(`已更新`)
-    getDir()
-    updateData.cancel()
-    updateData.nextInvocation()
+    getDir() //更新
+    updateData.cancel() //更新後取消
 });
 fs.watch(config.dataURL, () => {
-    console.log(`已排定更新`)
-    updateData.reschedule('*/15 * * * * *')
+    updateData.reschedule('*/15 * * * * *') //排定更新
 })
