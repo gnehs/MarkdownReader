@@ -6,7 +6,6 @@ const excerpt = require("html-excerpt"); // 取摘要
 const config = require("./config.json"); // 設定
 const package = require("./package.json"); // package.json
 const schedule = require('node-schedule'); // 排程
-const lang = require("./langs/" + config.lang + '.json'); // Lang
 
 // express
 const express = require('express');
@@ -36,7 +35,6 @@ const converter = new(require('showdown')).Converter({
     'openLinksInNewWindow': true
 })
 
-const timeout = ms => new Promise(res => setTimeout(res, ms))
 
 function getFileSummary(url, filename) {
     var data = fs.readFileSync(url + filename);
@@ -82,7 +80,7 @@ function getDir(url = config.dataURL) {
 
 function getDirSummary(url) {
     var dir = fs.readdirSync(config.dataURL + url + '/');
-    var summary = lang.page.folder + " / " + dir.toString()
+    var summary = "資料夾 / " + dir.toString()
     dirs.push({
         "url": config.dataURL + url + '/'
     })
@@ -94,10 +92,6 @@ function getDirSummary(url) {
     };
 }
 //============
-//    lang
-//============
-app.get('/lang', (req, res) => res.json(lang));
-//============
 //    Login
 //============
 app
@@ -105,7 +99,6 @@ app
         if (config.password.enabled && req.body.userPASS != config.password.password)
             res.render('login', {
                 title: config.siteName,
-                lang: lang,
                 page: 'login'
             })
         else
@@ -131,7 +124,6 @@ app.get('/', (req, res) =>
     res.render('index', {
         title: config.siteName,
         config: config,
-        lang: lang,
         page: 'home',
     })
 );
@@ -140,10 +132,9 @@ app.get('/mdr/posts', (req, res) => res.json(posts));
 
 app.get('/mdr/post/:id', (req, res) => res.json({
     title: req.params.id.replace(/\.[^.]+$/, ''),
-    content: getFile(config.dataURL, req.params.id)
+    content: getFile(config.dataURL, req.params.id),
+    stat: fs.statSync(config.dataURL + req.params.id)
 }));
-
-
 
 //============
 // pageSwitch
@@ -180,7 +171,6 @@ app.get('/mdr/search/:keyword', (req, res) => res.json(
     )
 ));
 
-
 //============
 //   Error
 //============
@@ -188,7 +178,6 @@ app.use((req, res, next) =>
     res.render('index', {
         title: config.siteName,
         config: config,
-        lang: lang,
         page: 'home',
     })
 );

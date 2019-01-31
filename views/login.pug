@@ -2,16 +2,16 @@ extends _layout.pug
 block content
 	.ts.container(style="margin-top:30px")
 		if(message)
-			h1.ts.center.aligned.negative.header=lang.login.errorHeader
-				.sub.header=message
+			h1.ts.center.aligned.negative.header 哎呀！
+				.sub.header 看來你輸入了錯誤的密碼
 		else
-			h1.ts.center.aligned.header=lang.login.header
-				.sub.header=lang.login.subHeader
+			h1.ts.center.aligned.header 阿囉哈！
+				.sub.header 請輸入密碼登入
 		#login.ts.centered.secondary.segment
 			.ts.form
 				.field
-					label=lang.login.password
+					label 密碼
 					input(type='password', placeholder='', id='userPASS', name='userPASS',required)
-				button.ts.positive.fluid.button(onclick='check()')=lang.login.loginButton
+				button.ts.positive.fluid.button(onclick='check()') 登入
 block footer
 	script(src='/js/login.js')

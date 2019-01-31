@@ -24,14 +24,13 @@ const sortButton = `<div class="ts icon circular buttons">
 </div>`
 
 function searchBox(keyword = false) {
-    let lang = JSON.parse(window.localStorage.lang)
     return `<div class="ts very narrow container">
                 <div class="ts action fluid input" id="searchbox">
                     <input id="search" 
-                        placeholder="${lang.search.placeholder}" 
+                        placeholder="輸入關鍵字來搜尋" 
                         type="text" 
                         ${keyword?`value="${keyword}"`:''}>
-                    <button class="ts button" onclick="searchPosts()">${lang.search.search}</button>
+                    <button class="ts button" onclick="searchPosts()">搜尋</button>
                 </div>
             </div>`
 }
@@ -51,21 +50,9 @@ $(document).ready(function () {
             localStorage.dark = "true"
         }
     });
-    $.get("/lang", function (data) {
-        window.localStorage.lang = JSON.stringify(data)
-        upadteLang()
-    });
     router.updatePageLinks()
 });
 
-function upadteLang() {
-    let lang = JSON.parse(window.localStorage.lang)
-    if (lang) {
-        $("#nav .home span").text(lang.nav.home)
-        $("#nav .search span").text(lang.nav.search)
-        $("#nav .dark span").text(lang.nav.nightMode)
-    }
-}
 /*==========*
  *   page   *
  *==========*/
@@ -94,10 +81,10 @@ router
     })
 
 function searchPosts(text) {
-    let lang = JSON.parse(window.localStorage.lang)
     if ($('input#search').val() == "")
         swal({
-            title: lang.search.placeholder,
+            title: "錯誤",
+            text: "請輸入關鍵字",
             icon: "error",
         })
     else {
@@ -117,7 +104,6 @@ function showSearch() {
 }
 
 async function showSearchResult(keyword) {
-    let lang = JSON.parse(window.localStorage.lang)
     $("#app")
         .html('')
         .append(searchBox(keyword))
@@ -141,13 +127,13 @@ async function showSearchResult(keyword) {
         .append(searchBox(keyword))
         .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
             <div class="stretched column">
-                <h3 class="ts header pagetitle">${result.length}${lang.search.result}</h3>
+                <h3 class="ts header pagetitle">${result.length} 個結果</h3>
             </div>
             <div class="column" style="text-align:right;">
                 ${sortButton}
             </div>
         </div>`)
-        .append(result.length > 0 ? parsePosts(result) : `<h5 class="ts center aligned header">${lang.error.nothingHere}</h5>`)
+        .append(result.length > 0 ? parsePosts(result) : `<h5 class="ts center aligned header">這裡沒有任何東西</h5>`)
 
     $("input#search").on("keydown", function (event) {
         if (event.which == 13)
@@ -178,11 +164,27 @@ function parsePosts(posts) {
     return r
 }
 async function showPost(filename) {
+    function readablizeBytes(bytes) {
+        var s = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        var e = Math.floor(Math.log(bytes) / Math.log(1024));
+        return (bytes / Math.pow(1024, Math.floor(e))).toFixed(2) + " " + s[e];
+    }
     let result = (await axios(`/mdr/post/${filename}`)).data
 
     $("#app")
         .html('')
-        .append(`<h3 class="ts center aligned header">${result.title}</h3>`)
+        .append(
+            `<h2 class="ts header">
+                <i class="file icon"></i>
+                <div class="content">
+                    ${result.title}
+                    <div class="sub header">
+                        ${moment(result.stat.mtime).format("YYYY/MM/DD HH:MM:SS")}
+                        ${readablizeBytes(result.stat.size)}
+                    </div>
+                </div>
+            </h2>`
+        )
         .append(`<div class="ts divider"></div>`)
         .append(`<div id="content">${result.content?result.content:"找不到這個檔案"}</div>`)
         .append(`<div class="ts horizontal divider">本文結束</div>`)
@@ -202,7 +204,6 @@ async function showPosts(page = 0) {
     if (!window.localStorage.sortPost) window.localStorage.sortPost = 'A-Z'
     let result = (await axios('/mdr/posts')).data
     let totalPage = Math.ceil(result.length / 24)
-    let lang = JSON.parse(window.localStorage.lang)
 
     switch (window.localStorage.sortPost) {
         case "Z-A":
@@ -229,7 +230,7 @@ async function showPosts(page = 0) {
         .html('')
         .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
             <div class="stretched column">
-                <h3 class="ts header pagetitle">${lang.page.nowPage.before}${page+1}${lang.page.nowPage.middle}${totalPage}${lang.page.nowPage.after}</h3>
+                <h3 class="ts header pagetitle">第 ${page+1} 頁，共 ${totalPage} 頁</h3>
             </div>
             <div class="column" style="text-align:right;">
                 ${sortButton}
