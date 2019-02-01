@@ -1,20 +1,22 @@
 extends _layout.pug
 block content
-	#nav.ts.basic.fluid.borderless.menu.horizontally.scrollable
-		.ts.container
-			a.sitetitle(href="/",data-navigo)=title
-			a.item.home(href="/",data-navigo)
-				i.icon.home
-				span 首頁
-			a.item.search(href="search",data-navigo)
-				i.icon.search
-				span 搜尋
-			.right.fitted.item
-				a.item.dark(data-dark)
-					i.icon.moon
-					span 夜間模式
-	#app.ts.container
-		.ts.active.centered.inline.loader
+	#app
+		#nav.ts.basic.fluid.borderless.menu.horizontally.scrollable
+			.ts.container
+				router-link.sitetitle(to="/",data-navigo)=title
+				router-link.item.home(to="/",data-navigo)
+					i.icon.home
+					span 首頁
+				router-link.item.search(to="/search",data-navigo)
+					i.icon.search
+					span 搜尋
+				.right.fitted.item
+					a.item.dark(data-dark)
+						i.icon.moon
+						span 夜間模式
+		router-view.ts.container
+			.ts.active.centered.inline.loader
+		
 block footer
 	#menu
 		a.button.previousChapter

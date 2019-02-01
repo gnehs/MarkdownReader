@@ -1,43 +1,8 @@
 /*==========*
- * template *
- *==========*/
-const loadingBox = `<div class="ts active centered inline loader"></div>`
-const sortButton = `<div class="ts icon circular buttons">
-<button class="ts button" data-sort="A-Z">
-    <i class="sort alphabet descending icon"></i>
-</button>
-<button class="ts button" data-sort="Z-A">
-    <i class="sort alphabet ascending icon"></i>
-</button>
-<button class="ts button" data-sort="time">
-    <i class="icons">
-        <i class="clock icon"></i>
-        <i class="sort descending corner icon"></i>
-    </i>
-</button>
-<button class="ts button" data-sort="timeReverse">
-    <i class="icons">
-        <i class="clock icon"></i>
-        <i class="sort ascending corner icon"></i>
-    </i>
-</button>
-</div>`
-
-function searchBox(keyword = false) {
-    return `<div class="ts very narrow container">
-                <div class="ts action fluid input" id="searchbox">
-                    <input id="search" 
-                        placeholder="輸入關鍵字來搜尋" 
-                        type="text" 
-                        ${keyword?`value="${keyword}"`:''}>
-                    <button class="ts button" onclick="searchPosts()">搜尋</button>
-                </div>
-            </div>`
-}
-/*==========*
  *  ready   *
  *==========*/
 $(document).ready(function () {
+    menuClick()
     if (localStorage.dark == "true")
         $('body').addClass("dark")
     $('[data-dark]').click(function () {
@@ -49,207 +14,270 @@ $(document).ready(function () {
             $('body').addClass("dark")
             localStorage.dark = "true"
         }
-    });
-    router.updatePageLinks()
+    })
 });
-
 /*==========*
- *   page   *
+ *    Vue   *
  *==========*/
-const router = new Navigo('/');
-router
-    .on({
-        'search/:keyword': params => showSearchResult(params.keyword),
-        'search': showSearch,
-        'post/:filename': params => showPost(params.filename),
-        'posts/:page': params => showPosts(Number(params.page) - 1),
-        '*': () => showPosts(0)
-    })
-    .resolve()
-router
-    .hooks({
-        before: (done, params) => {
-            $('#menu').removeClass('show')
-            $('#app').html(loadingBox)
-            $(document).attr("title", $("#data .siteTitle").text());
-            $('html, body').scrollTop(0)
-            done()
-        },
-        after: params => {
-            void(0)
+Vue.component('sortButton', {
+    data: function () {
+        return {
+            sort: localStorage.sortPost || ''
         }
-    })
-
-function searchPosts(text) {
-    if ($('input#search').val() == "")
-        swal({
-            title: "錯誤",
-            text: "請輸入關鍵字",
-            icon: "error",
-        })
-    else {
-        let keyword = encodeURIComponent($('input#search').val())
-        router.navigate(`search/${keyword}`);
+    },
+    template: `<div class="ts icon circular buttons">
+    <button class="ts button" @click="changeSort('A-Z');" :class="{active:sort=='A-Z'}">
+        <i class="sort alphabet descending icon"></i>
+    </button>
+    <button class="ts button" @click="changeSort('Z-A')" :class="{active:sort=='Z-A'}">
+        <i class="sort alphabet ascending icon"></i>
+    </button>
+    <button class="ts button" @click="changeSort('time')" :class="{active:sort=='time'}">
+        <i class="icons">
+            <i class="clock icon"></i>
+            <i class="sort descending corner icon"></i>
+        </i>
+    </button>
+    <button class="ts button" @click="changeSort('timeReverse')" :class="{active:sort=='timeReverse'}">
+        <i class="icons">
+            <i class="clock icon"></i>
+            <i class="sort ascending corner icon"></i>
+        </i>
+    </button>
+    </div>`,
+    methods: {
+        changeSort(s) {
+            this.sort = s
+            localStorage.sortPost = s
+            this.$emit('sort', s)
+        }
     }
-}
-
-function showSearch() {
-    $("#app")
-        .html('')
-        .append(searchBox())
-    $("input#search").on("keydown", function (event) {
-        if (event.which == 13)
-            searchPosts()
-    });
-}
-
-async function showSearchResult(keyword) {
-    $("#app")
-        .html('')
-        .append(searchBox(keyword))
-        .append(loadingBox)
-    let result = (await axios(`/mdr/search/${keyword}`)).data
-    switch (window.localStorage.sortPost) {
-        case "Z-A":
-            result.sort((a, b) => (b.title).localeCompare(a.title, "zh-Hant"))
-            break;
-        case "time":
-            result.sort((a, b) => new Date(b.time) - new Date(a.time))
-            break;
-        case "timeReverse":
-            result.sort((a, b) => new Date(a.time) - new Date(b.time))
-            break;
-        default: //a-z
-            result.sort((a, b) => (a.title).localeCompare(b.title, "zh-Hant"))
-    }
-    $("#app")
-        .html('')
-        .append(searchBox(keyword))
-        .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
+})
+Vue.component('loadingBox', {
+    template: `<div class="ts active centered inline loader"></div>`
+})
+Vue.component('posts', {
+    props: ['posts', 'pagination', 'page'],
+    data() {
+        return {
+            totalPage: 0,
+            postsPerPage: 24
+        }
+    },
+    template: `<div>
+        <div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
             <div class="stretched column">
-                <h3 class="ts header pagetitle">${result.length} 個結果</h3>
+                <h3 class="ts header pagetitle" v-if="pagination">第 {{page}} 頁，共 {{Math.ceil(posts.length / postsPerPage)}} 頁</h3>
             </div>
             <div class="column" style="text-align:right;">
-                ${sortButton}
+                <sortButton @sort="onSort"></sortButton>
             </div>
-        </div>`)
-        .append(result.length > 0 ? parsePosts(result) : `<h5 class="ts center aligned header">這裡沒有任何東西</h5>`)
+        </div>
+        <div class="ts divider"></div>
+        <div class="ts stackable three cards posts">
+            <post-card v-for="post in posts.slice((page - 1) * postsPerPage, page * postsPerPage)" :key="post.link" :post="post"></post-card>
+        </div>
+        <div class="pagination" v-if="pagination">
+            <router-link v-for="i in Math.ceil(posts.length / postsPerPage)" :key="i" :to="'/posts/'+i" class="ts circular button" activeClass="active">{{ i }}</router-link>
+        </div>
+    </div>`,
+    created() {
+        this.onSort()
+    },
+    methods: {
+        onSort() {
+            switch (localStorage.sortPost) {
+                case "Z-A":
+                    this.posts.sort((a, b) => (b.title).localeCompare(a.title, "zh-Hant"))
+                    break;
+                case "time":
+                    this.posts.sort((a, b) => new Date(b.time) - new Date(a.time))
+                    break;
+                case "timeReverse":
+                    this.posts.sort((a, b) => new Date(a.time) - new Date(b.time))
+                    break;
+                default: //a-z
+                    this.posts.sort((a, b) => (a.title).localeCompare(b.title, "zh-Hant"))
+            }
+        }
+    }
+})
+Vue.component('post-card', {
+    props: ['post'],
+    template: `<router-link class="ts card" :to="'/post/'+post.link">
+        <div class="content">
+            <div class="header">{{ post.title }}</div>
+            <div class="description">{{ post.summary }}</div>
+        </div>
+    </router-link>`
+})
+Vue.component('searchBox', {
+    data() {
+        return {
+            keyword: this.$route.params.keyword
+        }
+    },
+    template: `<form class="ts very narrow container" @submit.prevent="onSubmit">
+        <div class="ts action fluid input" id="searchbox">
+            <input id="search" 
+                placeholder="輸入關鍵字來搜尋" 
+                type="text" 
+                v-model.trim="keyword">
+            <button class="ts button" type="submit">搜尋</button>
+        </div>
+    </form>`,
+    methods: {
+        onSubmit() {
+            if (this.keyword == "" || !this.keyword) {
+                swal({
+                    title: "錯誤",
+                    text: "請輸入關鍵字",
+                    icon: "error",
+                })
+            } else {
+                router.push({
+                    name: 'search',
+                    params: {
+                        keyword: this.keyword
+                    }
+                })
+            }
+        }
+    }
+})
+Vue.component('searchResult', {
+    data() {
+        return {
+            posts: null,
+        }
+    },
+    created() {
+        this.fetchData()
+    },
+    template: `<div><posts :posts="posts" v-if="posts" :pagination="false"></posts><loadingBox v-else></loadingBox></div>`,
+    methods: {
+        fetchData() {
+            fetch(`/mdr/search/${this.$route.params.keyword}`)
+                .then(response => response.json())
+                .then(d => this.posts = d)
+        }
+    }
+})
+Vue.component('home', {
+    data() {
+        return {
+            posts: null
+        }
+    },
+    created() {
+        this.fetchData()
+    },
+    template: `<div><posts :posts="posts" v-if="posts" :pagination="true" :page="Number($route.params.page)"></posts><loadingBox v-else></loadingBox></div>`,
+    methods: {
+        fetchData() {
+            fetch(`/mdr/posts`)
+                .then(response => response.json())
+                .then(d => this.posts = d)
+        }
+    }
+})
 
-    $("input#search").on("keydown", function (event) {
-        if (event.which == 13)
-            searchPosts()
-    });
-    $(`[data-sort="${window.localStorage.sortPost}"]`).addClass("active")
-    $(`[data-sort]`).click(function () {
-        window.localStorage.sortPost = $(this).attr(`data-sort`)
-        showSearchResult(keyword)
-    })
-    router.updatePageLinks()
-}
-
-function parsePosts(posts) {
-    let r = $(`<div class="ts stackable three cards posts" />`)
-    for (let i in posts) {
-        let item = posts[i]
-        r.append(`<a class="ts card" href="post/${encodeURIComponent(item.link)}" data-navigo>
+Vue.component('post', {
+    created() {
+        this.fetchData()
+    },
+    data() {
+        return {
+            post: null,
+            time: null
+        }
+    },
+    template: `
+        <div>
+            <div v-if="post">
+                <h2 class="ts header">
+                    <i class="file icon"></i>
                     <div class="content">
-                        <div class="header">${item.title}</div>
-                        <div class="description">${item.summary}</div>
+                        {{post.title}}
+                        <div class="sub header">
+                            {{time}}
+                            {{size}}
+                        </div>
                     </div>
-                    ${item.icon?
-                        `<div class="symbol"><i class="icon ${item.icon}"></i></div>`:
-                        ``}
-                </a>`)
-    }
-    return r
-}
-async function showPost(filename) {
-    function readablizeBytes(bytes) {
-        var s = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
-        var e = Math.floor(Math.log(bytes) / Math.log(1024));
-        return (bytes / Math.pow(1024, Math.floor(e))).toFixed(2) + " " + s[e];
-    }
-    let result = (await axios(`/mdr/post/${filename}`)).data
-
-    $("#app")
-        .html('')
-        .append(
-            `<h2 class="ts header">
-                <i class="file icon"></i>
-                <div class="content">
-                    ${result.title}
-                    <div class="sub header">
-                        ${moment(result.stat.mtime).format("YYYY/MM/DD HH:MM:SS")}
-                        ${readablizeBytes(result.stat.size)}
-                    </div>
-                </div>
-            </h2>`
-        )
-        .append(`<div class="ts divider"></div>`)
-        .append(`<div id="content">${result.content?result.content:"找不到這個檔案"}</div>`)
-        .append(`<div class="ts horizontal divider">本文結束</div>`)
-
-    $(document).attr("title", result.title);
-    let chapter = $('#content h1,#content h2,#content h3,#content h4,#content h5,#content h6')
-    chapter.attr("class", "ts header")
-    if (chapter.length == 0) {
-        $('#menu').removeClass('show')
-    } else {
-        $('#menu').addClass('show')
-        menuClick()
-        scrollspy()
-    }
-}
-async function showPosts(page = 0) {
-    if (!window.localStorage.sortPost) window.localStorage.sortPost = 'A-Z'
-    let result = (await axios('/mdr/posts')).data
-    let totalPage = Math.ceil(result.length / 24)
-
-    switch (window.localStorage.sortPost) {
-        case "Z-A":
-            result.sort((a, b) => (b.title).localeCompare(a.title, "zh-Hant"))
-            break;
-        case "time":
-            result.sort((a, b) => new Date(b.time) - new Date(a.time))
-            break;
-        case "timeReverse":
-            result.sort((a, b) => new Date(a.time) - new Date(b.time))
-            break;
-        default: //a-z
-            result.sort((a, b) => (a.title).localeCompare(b.title, "zh-Hant"))
-    }
-
-    let pagination = `<div class="pagination">`
-    for (i = 0; i < totalPage; i++) {
-        pagination += `<a class="ts circular button ${i==page?`active`:``}" 
-                        href="posts/${i+1}" 
-                        data-navigo>${i+1}</a>`
-    }
-    pagination += `</div>`
-    $("#app")
-        .html('')
-        .append(`<div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
-            <div class="stretched column">
-                <h3 class="ts header pagetitle">第 ${page+1} 頁，共 ${totalPage} 頁</h3>
+                </h2>
+                <div class="ts divider"></div>
+                <div id="content" v-html="post.content">找不到這個檔案</div>
+                <div class="ts horizontal divider">本文結束</div>
             </div>
-            <div class="column" style="text-align:right;">
-                ${sortButton}
-            </div>
-        </div>`)
-        .append(`<div class="ts divider"></div>`)
-        .append(parsePosts(result.splice(page * 24, 24)))
-        .append(pagination)
-    $(`[data-sort="${window.localStorage.sortPost}"]`).addClass("active")
-    $(`[data-sort]`).click(function () {
-        window.localStorage.sortPost = $(this).attr(`data-sort`)
-        showPosts(page)
-    })
-    router.updatePageLinks()
-}
+            <loadingBox v-else></loadingBox>
+        </div>`,
+    methods: {
+        fetchData() {
+            fetch(`/mdr/post/${this.$route.params.filename}`)
+                .then(response => response.json())
+                .then(d => {
+                    function readablizeBytes(bytes) {
+                        var s = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+                        var e = Math.floor(Math.log(bytes) / Math.log(1024));
+                        return (bytes / Math.pow(1024, Math.floor(e))).toFixed(2) + s[e];
+                    }
+                    this.post = d
+                    this.time = moment(d.stat.mtime).format("YYYY/MM/DD HH:MM:SS")
+                    this.size = readablizeBytes(d.stat.size)
+                })
+        }
+    }
+})
+
+const router = new VueRouter({
+    mode: 'history',
+    scrollBehavior(to, from, savedPosition) {
+        return savedPosition || {
+            x: 0,
+            y: 0
+        }
+    },
+    routes: [{
+        path: '/search',
+        component: {
+            template: `<searchBox></searchBox>`
+        }
+    }, {
+        path: '/search/:keyword',
+        name: 'search',
+        component: {
+            template: `<div><searchBox></searchBox><searchResult></searchResult></div>`
+        },
+        props: true
+    }, {
+        path: '/post/:filename',
+        component: {
+            template: `<post></post>`
+        },
+        props: true
+    }, {
+        path: '/posts/:page',
+        name: 'posts',
+        component: {
+            template: `<home></home>`
+        },
+        props: true
+    }, {
+        path: '/',
+        redirect: '/posts/1'
+    }]
+})
+const app = new Vue({
+    router
+}).$mount('#app')
+
 
 /*==========*
- * function *
+ * scrollspy*
  *==========*/
+$(window).scroll(function () {
+    scrollspy()
+});
 
 function menuClick() {
     $('#menu .button').click(function () {
@@ -259,9 +287,6 @@ function menuClick() {
         }, 200);
     });
 }
-$(window).scroll(function () {
-    scrollspy()
-});
 
 function scrollspy() {
     let chapter = $('#content h1,#content h2,#content h3,#content h4,#content h5,#content h6')
