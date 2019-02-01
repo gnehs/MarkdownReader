@@ -60,7 +60,6 @@ Vue.component('posts', {
     props: ['posts', 'pagination', 'page'],
     data() {
         return {
-            totalPage: 0,
             postsPerPage: 24
         }
     },
@@ -68,14 +67,18 @@ Vue.component('posts', {
         <div class="ts stackable grid pageinfo" style="margin-bottom:15px;">
             <div class="stretched column">
                 <h3 class="ts header pagetitle" v-if="pagination">第 {{page}} 頁，共 {{Math.ceil(posts.length / postsPerPage)}} 頁</h3>
+                <h3 class="ts header pagetitle" v-else>{{posts.length}} 個搜尋結果</h3>
             </div>
             <div class="column" style="text-align:right;">
                 <sortButton @sort="onSort"></sortButton>
             </div>
         </div>
         <div class="ts divider"></div>
-        <div class="ts stackable three cards posts">
+        <div class="ts stackable three cards posts" v-if="pagination">
             <post-card v-for="post in posts.slice((page - 1) * postsPerPage, page * postsPerPage)" :key="post.link" :post="post"></post-card>
+        </div>
+        <div class="ts stackable three cards posts" v-else>
+            <post-card v-for="post in posts" :key="post.link" :post="post"></post-card>
         </div>
         <div class="pagination" v-if="pagination">
             <router-link v-for="i in Math.ceil(posts.length / postsPerPage)" :key="i" :to="'/posts/'+i" class="ts circular button" activeClass="active">{{ i }}</router-link>
