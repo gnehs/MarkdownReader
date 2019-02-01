@@ -161,6 +161,7 @@ Vue.component('searchResult', {
     template: `<div><searchBox @search="fetchData"></searchBox><posts :posts="posts" v-if="posts" :pagination="false"></posts><loadingBox v-else></loadingBox></div>`,
     methods: {
         fetchData() {
+            this.posts = null
             fetch(`/mdr/search/${this.$route.params.keyword}`)
                 .then(response => response.json())
                 .then(d => this.posts = d)
