@@ -201,7 +201,7 @@ Vue.component('post', {
         <div>
             <div v-if="post">
                 <h2 class="ts header">
-                    <i class="file icon"></i>
+                    <i class="file text outline icon"></i>
                     <div class="content">
                         {{post.title}}
                         <div class="sub header">
