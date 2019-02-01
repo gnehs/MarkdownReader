@@ -144,6 +144,7 @@ Vue.component('searchBox', {
                         keyword: this.keyword
                     }
                 })
+                this.$emit('search', this.keyword)
             }
         }
     }
@@ -157,7 +158,7 @@ Vue.component('searchResult', {
     created() {
         this.fetchData()
     },
-    template: `<div><posts :posts="posts" v-if="posts" :pagination="false"></posts><loadingBox v-else></loadingBox></div>`,
+    template: `<div><searchBox @search="fetchData"></searchBox><posts :posts="posts" v-if="posts" :pagination="false"></posts><loadingBox v-else></loadingBox></div>`,
     methods: {
         fetchData() {
             fetch(`/mdr/search/${this.$route.params.keyword}`)
@@ -249,7 +250,7 @@ const router = new VueRouter({
         path: '/search/:keyword',
         name: 'search',
         component: {
-            template: `<div><searchBox></searchBox><searchResult></searchResult></div>`
+            template: `<div><searchResult></searchResult></div>`
         },
         props: true
     }, {
