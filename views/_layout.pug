@@ -28,7 +28,10 @@ html
         script(src='//cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js')
         script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js')
         script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/zh-tw.js')
-        script(src='//cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js')
+        -if(env.NODE_ENV=="production")
+            script(src='//cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.min.js')
+        -else
+            script(src='//cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js')
         script(src='//unpkg.com/vue-router@3.0.2/dist/vue-router.js')
         script(src='//unpkg.com/vue-swal@1.0.0/dist/vue-swal.js')
         script(src='/js/navigo.min.js')

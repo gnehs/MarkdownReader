@@ -21,7 +21,7 @@ app.use(require('express-session')({
     saveUninitialized: false,
 }));
 app.use('/', express.static('public'));
-
+app.locals.env = process.env;
 
 // Markdown viewer
 const converter = new(require('showdown')).Converter({
