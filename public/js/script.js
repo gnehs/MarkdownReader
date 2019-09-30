@@ -16,16 +16,26 @@ $(document).ready(function () {
         }
     })
 });
+
 /*==========*
  *    Vue   *
  *==========*/
 Vue.component('sortButton', {
     data: function () {
         return {
-            sort: localStorage.sortPost || 'A-Z'
+            sort: localStorage.sortPost || 'time',
+            view: localStorage.view || 'card'
         }
     },
-    template: `<div class="ts icon circular buttons">
+    template: `<div><div class="ts icon circular buttons">
+    <button class="ts button" @click="changeView('card');" :class="{active:view=='card'}">
+        <i class="block layout icon"></i>
+    </button>
+    <button class="ts button" @click="changeView('list')" :class="{active:view=='list'}">
+        <i class="list ul icon"></i>
+    </button>
+    </div>
+    <div class="ts icon circular buttons">
     <button class="ts button" @click="changeSort('A-Z');" :class="{active:sort=='A-Z'}">
         <i class="sort alphabet descending icon"></i>
     </button>
@@ -44,12 +54,17 @@ Vue.component('sortButton', {
             <i class="sort ascending corner icon"></i>
         </i>
     </button>
-    </div>`,
+    </div></div>`,
     methods: {
         changeSort(s) {
             this.sort = s
             localStorage.sortPost = s
             this.$emit('sort', s)
+        },
+        changeView(s) {
+            this.view = s
+            localStorage.view = s
+            this.$emit('view', s)
         }
     }
 })
@@ -60,7 +75,8 @@ Vue.component('posts', {
     props: ['posts', 'pagination', 'page'],
     data() {
         return {
-            postsPerPage: 24
+            postsPerPage: 24,
+            view: localStorage.view
         }
     },
     template: `<div>
@@ -70,15 +86,25 @@ Vue.component('posts', {
                 <h3 class="ts header pagetitle" v-else>{{posts.length}} 個搜尋結果</h3>
             </div>
             <div class="column" style="text-align:right;">
-                <sortButton @sort="onSort"></sortButton>
+                <sortButton @sort="onSort" @view="onView"></sortButton>
             </div>
         </div>
         <div class="ts divider"></div>
-        <div class="ts stackable three cards posts" v-if="pagination">
-            <post-card v-for="post in posts.slice((page - 1) * postsPerPage, page * postsPerPage)" :key="post.link" :post="post"></post-card>
+        <div v-if="view=='card'">
+            <div class="ts stackable three cards posts" v-if="pagination">
+                <post-card v-for="post in posts.slice((page - 1) * postsPerPage, page * postsPerPage)" :key="post.link" :post="post"></post-card>
+            </div>
+            <div class="ts stackable three cards posts" v-else>
+                <post-card v-for="post in posts" :key="post.link" :post="post"></post-card>
+            </div>
         </div>
-        <div class="ts stackable three cards posts" v-else>
-            <post-card v-for="post in posts" :key="post.link" :post="post"></post-card>
+        <div v-else>
+            <div class="ts single line selection items" v-if="pagination">
+                <post-list v-for="post in posts.slice((page - 1) * postsPerPage, page * postsPerPage)" :key="post.link" :post="post"></post-list>
+            </div>
+            <div class="ts single line selection items" v-else>
+                <post-list v-for="post in posts" :key="post.link" :post="post"></post-list>
+            </div>
         </div>
         <div class="pagination" v-if="pagination">
             <router-link v-for="i in Math.ceil(posts.length / postsPerPage)" :key="i" :to="'/posts/'+i" class="ts circular button" activeClass="active">{{ i }}</router-link>
@@ -86,22 +112,26 @@ Vue.component('posts', {
     </div>`,
     created() {
         this.onSort()
+        this.onView()
     },
     methods: {
         onSort() {
             switch (localStorage.sortPost) {
                 case "Z-A":
                     this.posts.sort((a, b) => (b.title).localeCompare(a.title, "zh-Hant"))
-                    break;
+                    break
                 case "time":
                     this.posts.sort((a, b) => new Date(b.time) - new Date(a.time))
-                    break;
+                    break
                 case "timeReverse":
                     this.posts.sort((a, b) => new Date(a.time) - new Date(b.time))
-                    break;
+                    break
                 default: //a-z
                     this.posts.sort((a, b) => (a.title).localeCompare(b.title, "zh-Hant"))
             }
+        },
+        onView() {
+            this.view = localStorage.view
         }
     }
 })
@@ -112,6 +142,26 @@ Vue.component('post-card', {
             <div class="header">{{ post.title }}</div>
             <div class="description">{{ post.summary }}</div>
         </div>
+    </router-link>`
+})
+Vue.component('post-list', {
+    props: ['post'],
+    data: () => ({
+        time: ''
+    }),
+    created() {
+        this.time = moment().diff(this.post.time, 'days') > 15 ?
+            moment(this.post.time).format("YYYY 年 MM 月 DD 日 HH 時") :
+            moment(this.post.time).fromNow()
+    },
+    template: `<router-link class="item" :to="'/post/'+post.link">
+    <div class="content">
+        <div class="header">{{ post.title }}</div>
+        <div class="description">{{ post.summary }}</div>
+        <div class="extra">
+            {{ time }}
+        </div>
+    </div>
     </router-link>`
 })
 Vue.component('searchBox', {
