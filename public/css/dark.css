@@ -39,11 +39,14 @@ body.dark {
 .dark h6,
 .dark label,
 .dark .ts.card>.content>.header,
+.dark .ts.items>.item>.content>.header,
 .dark #login {
     color: #fff !important;
 }
 
-.dark .ts.header .sub.header {
+
+.dark .ts.header .sub.header,
+.dark .ts.items>.item>.content>.description {
     color: #e4e4e4;
 }
 
