@@ -22,7 +22,7 @@ $(document).ready(function () {
 Vue.component('sortButton', {
     data: function () {
         return {
-            sort: localStorage.sortPost || ''
+            sort: localStorage.sortPost || 'A-Z'
         }
     },
     template: `<div class="ts icon circular buttons">
