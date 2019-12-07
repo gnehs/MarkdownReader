@@ -28,6 +28,9 @@ Vue.component('sortButton', {
         }
     },
     template: `<div><div class="ts icon circular buttons">
+    <button class="ts button" @click="changeView('title');" :class="{active:view=='title'}">
+        <i class="header icon"></i>
+    </button>
     <button class="ts button" @click="changeView('card');" :class="{active:view=='card'}">
         <i class="block layout icon"></i>
     </button>
@@ -98,6 +101,14 @@ Vue.component('posts', {
                 <post-card v-for="post in posts" :key="post.link" :post="post"></post-card>
             </div>
         </div>
+        <div v-else-if="view=='title'">
+            <div class="ts single line selection items" v-if="pagination">
+                <post-title v-for="post in posts.slice((page - 1) * postsPerPage, page * postsPerPage)" :key="post.link" :post="post"></post-title>
+            </div>
+            <div class="ts single line selection items" v-else>
+                <post-title v-for="post in posts" :key="post.link" :post="post"></post-title>
+            </div>
+        </div>
         <div v-else>
             <div class="ts single line selection items" v-if="pagination">
                 <post-list v-for="post in posts.slice((page - 1) * postsPerPage, page * postsPerPage)" :key="post.link" :post="post"></post-list>
@@ -162,6 +173,14 @@ Vue.component('post-list', {
             {{ time }}
         </div>
     </div>
+    </router-link>`
+})
+Vue.component('post-title', {
+    props: ['post'],
+    template: `<router-link class="item" :to="'/post/'+post.link">
+        <div class="content">
+            <div class="header">{{ post.title }}</div>
+        </div>
     </router-link>`
 })
 Vue.component('searchBox', {
