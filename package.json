@@ -4,6 +4,7 @@
     "description": "MarkdownReader",
     "main": "index.js",
     "dependencies": {
+        "cors": "^2.8.5",
         "express": "^4.16.2",
         "express-session": "^1.15.6",
         "html-excerpt": "^0.1.0",

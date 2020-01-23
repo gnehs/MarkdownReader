@@ -8,8 +8,10 @@ const package = require("./package.json"); // package.json
 const schedule = require('node-schedule'); // 排程
 
 // express
+const cors = require('cors')
 const express = require('express');
 const app = express();
+app.use(cors())
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 app.use(require('body-parser').urlencoded({
